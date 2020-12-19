@@ -3,7 +3,6 @@
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
-#include "json.hpp"
 
 #include "objSerialization/WavefrontSerialization.h"
 #include "Rendering/Vertex.h"
@@ -36,7 +35,6 @@ int main()
 	// const int* p : reading possible but not modifying
 	// int& r : creates reference
 	// r->x : (*r).x
-	//Testing Git
 
 	//ECS Sample Code
 	//Entity entity;

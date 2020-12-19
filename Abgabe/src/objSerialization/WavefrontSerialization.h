@@ -87,36 +87,42 @@ namespace WavefrontSerialization
 					linestream >> indexString;
 					std::istringstream indexStream(indexString);
 
-					std::string tempString;
-
-					auto it = indexMap.find(tempString);
+					auto it = indexMap.find(indexString);
 					if (it == indexMap.end())
 					{
-						indexMap.insert(std::make_pair(tempString, uniqueVertexCount));
+						indexMap.insert(std::make_pair(indexString, uniqueVertexCount));
+						outIndicesList.emplace_back(uniqueVertexCount);
 						uniqueVertexCount++;
 					}
-
-					//unoptimized vertex creation, creates duplicate vertices
-					Vertex& vertexRef = outVertexList.emplace_back();
-
-					std::getline(indexStream, tempString, '/');
-					vertexRef.position = positions[(std::stoi(tempString) - 1)];
-
-
-					std::getline(indexStream, tempString, '/');
-					vertexRef.texcoord1 = texcoords[(std::stoi(tempString) - 1)];
-
-					std::getline(indexStream, tempString, '/');
-					vertexRef.normal = normals[(std::stoi(tempString) - 1)];
-
-					outIndicesList.emplace_back((unsigned int)(outVertexList.size() - 1));
+					else
+					{
+						outIndicesList.emplace_back(indexMap[indexString]);
+					}
 				}
 			}
+		}
+		//Create Vertices
+
+		outVertexList.resize(indexMap.size());
+
+		for (auto& pair : indexMap)
+		{
+			std::istringstream indicesStream(pair.first);
+			std::string tempString;
+
+			std::getline(indicesStream, tempString, '/');
+			outVertexList[pair.second].position = positions[(std::stoi(tempString) - 1)];
+
+			std::getline(indicesStream, tempString, '/');
+			outVertexList[pair.second].texcoord1 = texcoords[(std::stoi(tempString) - 1)];
+
+			std::getline(indicesStream, tempString, '/');
+			outVertexList[pair.second].normal = normals[(std::stoi(tempString) - 1)];
 		}
 
 		std::cout << "Vertex Count: " << outVertexList.size() << std::endl;
 		std::cout << "Indices Count: " << outIndicesList.size() << std::endl;
-		std::cout << "Unique Vertices Count: " << uniqueVertexCount + 1 << std::endl;
+		std::cout << "Unique Vertices Count: " << indexMap.size() << std::endl;
 
 		wfObj.close();
 	}
