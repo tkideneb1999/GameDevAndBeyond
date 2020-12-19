@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <unordered_map>
 
 #include "glm/vec3.hpp"
 #include "glm/vec2.hpp"
@@ -28,17 +29,20 @@ namespace WavefrontSerialization
 		std::vector<glm::vec2> texcoords;
 		std::vector<glm::vec3> normals;
 
+		std::unordered_map<std::string, unsigned int> indexMap;
+		unsigned int uniqueVertexCount = 0;
+
 		outVertexList.clear();
 		outIndicesList.clear();
 
 		while (std::getline(wfObj, currentLine, '\n'))
 		{
 			std::istringstream linestream(currentLine);
-			std::string tempString;
-			linestream >> tempString;
+			std::string vertexDataType;
+			linestream >> vertexDataType;
 
 			//Extract vertex Positions
-			if (tempString == "v")
+			if (vertexDataType == "v")
 			{
 
 				glm::vec3 ref = positions.emplace_back(0, 0, 0);
@@ -51,7 +55,7 @@ namespace WavefrontSerialization
 			}
 
 			//Extract Texture Coordinates
-			if (tempString == "vt")
+			if (vertexDataType == "vt")
 			{
 				glm::vec2& ref = texcoords.emplace_back(0, 0);
 
@@ -62,7 +66,7 @@ namespace WavefrontSerialization
 			}
 
 			//Extract Normals
-			if (tempString == "vn")
+			if (vertexDataType == "vn")
 			{
 				glm::vec3& ref = normals.emplace_back(0, 0, 0);
 
@@ -72,19 +76,32 @@ namespace WavefrontSerialization
 
 				std::cout << "VertexNormal detected, with values: x: " << ref.x << " y: " << ref.y << " z: " << ref.z << std::endl;
 			}
-			if (tempString == "f")
+
+			//Extract Face indices
+			if (vertexDataType == "f")
 			{
 				std::string indexString;
 
 				for (int i = 0; i < 3; i++)
 				{
-					Vertex& vertexRef = outVertexList.emplace_back();
 					linestream >> indexString;
 					std::istringstream indexStream(indexString);
 
 					std::string tempString;
+
+					auto it = indexMap.find(tempString);
+					if (it == indexMap.end())
+					{
+						indexMap.insert(std::make_pair(tempString, uniqueVertexCount));
+						uniqueVertexCount++;
+					}
+
+					//unoptimized vertex creation, creates duplicate vertices
+					Vertex& vertexRef = outVertexList.emplace_back();
+
 					std::getline(indexStream, tempString, '/');
 					vertexRef.position = positions[(std::stoi(tempString) - 1)];
+
 
 					std::getline(indexStream, tempString, '/');
 					vertexRef.texcoord1 = texcoords[(std::stoi(tempString) - 1)];
@@ -99,6 +116,7 @@ namespace WavefrontSerialization
 
 		std::cout << "Vertex Count: " << outVertexList.size() << std::endl;
 		std::cout << "Indices Count: " << outIndicesList.size() << std::endl;
+		std::cout << "Unique Vertices Count: " << uniqueVertexCount + 1 << std::endl;
 
 		wfObj.close();
 	}
