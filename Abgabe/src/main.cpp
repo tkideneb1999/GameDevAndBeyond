@@ -3,6 +3,7 @@
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
+#include "glm/glm.hpp"
 
 #include "objSerialization/WavefrontSerialization.h"
 #include "Rendering/Vertex.h"
@@ -24,9 +25,9 @@ int main()
 	}
 
 	//object serialization
-	std::vector<Vertex> vertices;
-	std::vector<unsigned int> indices;
-	WavefrontSerialization::LoadWavefront("../resources/cube.obj", vertices, indices);
+	//std::vector<Vertex> vertices;
+	//std::vector<unsigned int> indices;
+	//WavefrontSerialization::LoadWavefront("../resources/cube.obj", vertices, indices);
 
 	// int* var : declares pointer -> stores address to variable
 	// *var		: dereferences pointer -> can change value
@@ -49,9 +50,26 @@ int main()
 	if (GLEW_OK != err)
 		std::cout << "Error: " << glewGetErrorString(err) << std::endl;
 
+	glm::vec3 testVertices[3];
+	testVertices[0] = glm::vec3(-1.0f, -1.0f, 0.0f);
+	testVertices[1] = glm::vec3(1.0f, -1.0f, 0.0f);
+	testVertices[2] = glm::vec3(0.0f, 1.0f, 0.0f);
+
+	GLuint VBO;
+	glGenBuffers(1, &VBO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(testVertices), testVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+
 	while (!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glfwSwapBuffers(window);
 
@@ -60,6 +78,8 @@ int main()
 		//ECS Sample Code
 		//RenderSystem.Render();
 	}
+
+	glDisableVertexAttribArray(0);
 
 	glfwTerminate();
 	return 0;
