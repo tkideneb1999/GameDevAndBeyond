@@ -101,7 +101,7 @@ namespace WavefrontSerialization
 				}
 			}
 		}
-		//Create Vertices
+		//Create Vertices, ignore duplicates
 
 		outVertexList.resize(indexMap.size());
 
