@@ -37,6 +37,13 @@ int main()
 	// const int* p : reading possible but not modifying
 	// int& r : creates reference
 	// r->x : (*r).x
+	//int* x, y : makes only first variable a pointer, has to be written as: int* x, *y
+
+	//const int var = 1 : cannot change var anymore -> makes it read-only
+	//const int* var = 1; int const* var = 1 : cannot change content of pointer
+	//int* const var = 1 : can change content, but not memory address, important const has to be after *
+	//const int* const var = 1 : cannot modify anything
+	//with methods: int() const : does not modify classes contents
 
 	//ECS Sample Code
 	//Entity entity;
