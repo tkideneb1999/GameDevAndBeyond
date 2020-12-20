@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
@@ -61,6 +62,18 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(testVertices), testVertices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
+
+	GLuint shaderProgram = glCreateProgram();
+	GLuint vertShaderObject = glCreateShader(GL_VERTEX_SHADER);
+	GLuint fragShaderObject = glCreateShader(GL_FRAGMENT_SHADER);
+
+	std::string vertShaderSource = "";
+	std::string fragShaderSource = "";
+
+	const GLchar* const* test = vertShaderSource.c_str();
+	GLint testInt;
+
+	glShaderSource(vertShaderObject, 1, test,vertShaderSource.length());
 
 	while (!glfwWindowShouldClose(window))
 	{

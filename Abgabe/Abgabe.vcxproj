@@ -179,6 +179,7 @@
     <ClInclude Include="src\json.hpp" />
     <ClInclude Include="src\objSerialization\WavefrontSerialization.h" />
     <ClInclude Include="src\Rendering\Mesh.h" />
+    <ClInclude Include="src\Rendering\Shader.h" />
     <ClInclude Include="src\RenderSystem.h" />
     <ClInclude Include="src\TypeID.h" />
     <ClInclude Include="src\Rendering\Vertex.h" />
