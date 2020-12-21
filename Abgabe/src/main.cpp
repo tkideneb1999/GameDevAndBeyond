@@ -5,6 +5,7 @@
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 #include "objSerialization/WavefrontSerialization.h"
 #include "Rendering/Vertex.h"
@@ -67,6 +68,15 @@ int main()
 	testVertices[1] = glm::vec3(1.0f, -1.0f, 0.0f);
 	testVertices[2] = glm::vec3(0.0f, 1.0f, 0.0f);
 
+	//Transformation
+	glm::vec3 position = glm::vec3(0.5f, 0.5f, 0.0f);
+	glm::vec3 rotationAxis = glm::vec3(0.0f, 0.0f, 1.0f);
+	float rotAngle = 0.0f;
+	float uniformScale = 0.5f;
+	glm::vec3 scale = glm::vec3(uniformScale);
+	
+	glm::mat4x4 model = glm::translate(glm::rotate(glm::scale(glm::mat4(1.0f), scale), rotAngle, rotationAxis), position);
+
 	GLuint VBO;
 	glGenBuffers(1, &VBO);
 
@@ -87,6 +97,7 @@ int main()
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		shader.EnableShader();
 		shader.SetUniform1f("gScale", 0.5f * sinf(time) + 0.5f);
+		shader.SetMatrix4x4("gModel", model);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glfwSwapBuffers(window);

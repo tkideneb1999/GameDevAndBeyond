@@ -117,3 +117,8 @@ void Shader::SetUniform2f(const char* name, glm::vec2 value)
 {
 	glUniform2f(CacheUniformLocation(name), value.x, value.y);
 }
+
+void Shader::SetMatrix4x4(const char* name, glm::mat4x4 value)
+{
+	glUniformMatrix4fv(CacheUniformLocation(name), 1, GL_FALSE, &value[0][0]);
+}

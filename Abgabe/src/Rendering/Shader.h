@@ -3,12 +3,12 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-
 #include <unordered_map>
 
 #include "GL/glew.h"
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
+#include "glm/mat4x4.hpp"
 
 class Shader
 {
@@ -34,4 +34,5 @@ private:
 public:
 	void SetUniform1f(const char* name, float value);
 	void SetUniform2f(const char* name, glm::vec2 value);
+	void SetMatrix4x4(const char* name, glm::mat4x4);
 };
