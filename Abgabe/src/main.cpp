@@ -76,6 +76,8 @@ int main()
 
 	Shader shader("../Abgabe/resources/Shaders/DefaultVert.shader", "../Abgabe/resources/Shaders/DefaultFrag.shader");
 
+	float time = 0;
+
 	while (!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -84,6 +86,7 @@ int main()
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		shader.EnableShader();
+		shader.SetUniform1f("gScale", 0.5f * sinf(time) + 0.5f);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glfwSwapBuffers(window);
@@ -92,6 +95,7 @@ int main()
 
 		//ECS Sample Code
 		//RenderSystem.Render();
+		time += 0.01f;
 	}
 
 	glDisableVertexAttribArray(0);

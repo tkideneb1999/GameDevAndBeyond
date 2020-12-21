@@ -22,11 +22,6 @@ Shader::Shader(const char* vertShaderPath, const char* fragShaderPath)
 	glDeleteShader(fragShader);
 }
 
-Shader::~Shader()
-{
-	
-}
-
 void Shader::EnableShader()
 {
 #ifdef _DEBUG
@@ -99,4 +94,26 @@ GLuint Shader::CreateShader(const char* sourcePath, GLenum type)
 #endif
 
 	return shaderHandle;
+}
+
+GLuint Shader::CacheUniformLocation(const char* name)
+{
+	auto it = uniformMap.find(name);
+	if (it == uniformMap.end())
+	{
+		GLuint uniformLocation = glGetUniformLocation(m_ShaderProgram, name);
+		uniformMap.insert(std::make_pair(name, uniformLocation));
+	}
+
+	return uniformMap[name];
+}
+
+void Shader::SetUniform1f(const char* name, float value)
+{
+	glUniform1f(CacheUniformLocation(name), value);
+}
+
+void Shader::SetUniform2f(const char* name, glm::vec2 value)
+{
+	glUniform2f(CacheUniformLocation(name), value.x, value.y);
 }
