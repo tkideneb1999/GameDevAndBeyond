@@ -63,10 +63,15 @@ int main()
 
 	RenderingUtils::printVersion();
 
-	glm::vec3 testVertices[3];
+	glm::vec3 testVertices[4];
 	testVertices[0] = glm::vec3(-1.0f, -1.0f, 0.0f);
-	testVertices[1] = glm::vec3(1.0f, -1.0f, 0.0f);
-	testVertices[2] = glm::vec3(0.0f, 1.0f, 0.0f);
+	testVertices[1] = glm::vec3(-1.0f, 1.0f, 0.0f);
+	testVertices[2] = glm::vec3(1.0f, 1.0f, 0.0f);
+	testVertices[3] = glm::vec3(1.0f, -1.0f, 0.0f);
+
+	unsigned int indices[] = {
+		0, 1, 2, 
+		0, 2, 3,};
 
 	//Transformation
 	glm::vec3 position = glm::vec3(0.5f, 0.5f, 0.0f);
@@ -84,6 +89,12 @@ int main()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(testVertices), testVertices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 
+	GLuint IBO;
+	glGenBuffers(1, &IBO);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
 	Shader shader("../Abgabe/resources/Shaders/DefaultVert.shader", "../Abgabe/resources/Shaders/DefaultFrag.shader");
 
 	float time = 0;
@@ -94,11 +105,12 @@ int main()
 
 		
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		shader.EnableShader();
 		shader.SetUniform1f("gScale", 0.5f * sinf(time) + 0.5f);
 		shader.SetMatrix4x4("gModel", model);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);
 
