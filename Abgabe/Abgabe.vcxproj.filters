@@ -39,6 +39,9 @@
     <ClCompile Include="src\Rendering\Mesh.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Shader.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\json.hpp">
@@ -917,6 +920,9 @@
     <ClInclude Include="src\Rendering\Shader.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="src\Rendering\RenderingUtils.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ThirdParty\glm\detail\func_common.inl">
@@ -1327,5 +1333,7 @@
     <None Include="ThirdParty\glm\gtx\wrap.inl">
       <Filter>Headerdateien</Filter>
     </None>
+    <None Include="resources\Shaders\DefaultFrag.shader" />
+    <None Include="resources\Shaders\DefaultVert.shader" />
   </ItemGroup>
 </Project>

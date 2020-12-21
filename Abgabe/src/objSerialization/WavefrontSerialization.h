@@ -50,8 +50,9 @@ namespace WavefrontSerialization
 				linestream >> ref.x;
 				linestream >> ref.y;
 				linestream >> ref.z;
-
+#ifdef _DEBUG
 				std::cout << "VertexPosition detected, with Positions: x: " << ref.x << " y: " << ref.y << " z: " << ref.z << std::endl;
+#endif
 			}
 
 			//Extract Texture Coordinates
@@ -61,8 +62,9 @@ namespace WavefrontSerialization
 
 				linestream >> ref.x;
 				linestream >> ref.y;
-
+#ifdef _DEBUG
 				std::cout << "VertexUV detected, with Coordinates: x: " << ref.x << " y: " << ref.y << std::endl;
+#endif
 			}
 
 			//Extract Normals
@@ -73,8 +75,9 @@ namespace WavefrontSerialization
 				linestream >> ref.x;
 				linestream >> ref.y;
 				linestream >> ref.z;
-
+#ifdef _DEBUG
 				std::cout << "VertexNormal detected, with values: x: " << ref.x << " y: " << ref.y << " z: " << ref.z << std::endl;
+#endif
 			}
 
 			//Extract Face indices
@@ -119,10 +122,11 @@ namespace WavefrontSerialization
 			std::getline(indicesStream, tempString, '/');
 			outVertexList[pair.second].normal = normals[(std::stoi(tempString) - 1)];
 		}
-
+#ifdef _DEBUG
 		std::cout << "Vertex Count: " << outVertexList.size() << std::endl;
 		std::cout << "Indices Count: " << outIndicesList.size() << std::endl;
 		std::cout << "Unique Vertices Count: " << indexMap.size() << std::endl;
+#endif
 
 		wfObj.close();
 	}

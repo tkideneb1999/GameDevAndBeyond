@@ -8,6 +8,8 @@
 
 #include "objSerialization/WavefrontSerialization.h"
 #include "Rendering/Vertex.h"
+#include "Rendering/Shader.h"
+#include "Rendering/RenderingUtils.h"
 
 int main()
 {
@@ -58,6 +60,8 @@ int main()
 	if (GLEW_OK != err)
 		std::cout << "Error: " << glewGetErrorString(err) << std::endl;
 
+	RenderingUtils::printVersion();
+
 	glm::vec3 testVertices[3];
 	testVertices[0] = glm::vec3(-1.0f, -1.0f, 0.0f);
 	testVertices[1] = glm::vec3(1.0f, -1.0f, 0.0f);
@@ -70,17 +74,7 @@ int main()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(testVertices), testVertices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 
-	GLuint shaderProgram = glCreateProgram();
-	GLuint vertShaderObject = glCreateShader(GL_VERTEX_SHADER);
-	GLuint fragShaderObject = glCreateShader(GL_FRAGMENT_SHADER);
-
-	std::string vertShaderSource = "";
-	std::string fragShaderSource = "";
-
-	const GLchar* const* test = vertShaderSource.c_str();
-	GLint testInt;
-
-	glShaderSource(vertShaderObject, 1, test,vertShaderSource.length());
+	Shader shader("../Abgabe/resources/Shaders/DefaultVert.shader", "../Abgabe/resources/Shaders/DefaultFrag.shader");
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -89,6 +83,7 @@ int main()
 		
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		shader.EnableShader();
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glfwSwapBuffers(window);

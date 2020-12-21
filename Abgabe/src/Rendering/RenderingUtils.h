@@ -14,5 +14,6 @@ namespace RenderingUtils
 		glGetIntegerv(GL_MINOR_VERSION, &versionMinor);
 
 		std::cout << "OpenGL Version: " << versionMajor << "." << versionMinor << std::endl;
+		std::cout << std::endl;
 	}
 }
