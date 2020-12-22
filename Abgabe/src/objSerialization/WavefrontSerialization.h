@@ -45,7 +45,7 @@ namespace WavefrontSerialization
 			if (vertexDataType == "v")
 			{
 
-				glm::vec3 ref = positions.emplace_back(0, 0, 0);
+				glm::vec3& ref = positions.emplace_back(0, 0, 0);
 
 				linestream >> ref.x;
 				linestream >> ref.y;

@@ -84,7 +84,7 @@ int main()
 	//object serialization
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
-	WavefrontSerialization::LoadWavefront("../resources/cube.obj", vertices, indices);
+	WavefrontSerialization::LoadWavefront("../resources/suzanne.obj", vertices, indices);
 
 	//Model
 	glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -107,14 +107,20 @@ int main()
 	float aspectRatio = (float)width / (float)height;
 	glm::mat4x4 projection = glm::perspective(glm::radians(45.0f), aspectRatio, 0.01f, 100.0f);
 
+	//MVP Matrix
 	glm::mat4x4 MVP;
+	glm::mat4x4 ITM;
 	
+	//Depth Testing
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+
 	//Vertex Buffer
 	GLuint VBO;
 	glGenBuffers(1, &VBO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * testVertices.size(), testVertices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
@@ -124,7 +130,7 @@ int main()
 	glGenBuffers(1, &IBO);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * testIndices.size(), testIndices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), indices.data(), GL_STATIC_DRAW);
 
 	Shader shader("../Abgabe/resources/Shaders/DefaultVert.shader", "../Abgabe/resources/Shaders/DefaultFrag.shader");
 
@@ -132,7 +138,7 @@ int main()
 
 	while (!glfwWindowShouldClose(window))
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -140,15 +146,20 @@ int main()
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)12);
 		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)24);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-		glFrontFace(GL_CW);
+
+		glFrontFace(GL_CCW);
+		glCullFace(GL_BACK);
+		glEnable(GL_CULL_FACE);
 
 		shader.EnableShader();
 		rotAngle = glm::radians((time * 100));
 		model = glm::translate(glm::rotate(glm::scale(glm::mat4(1.0f), scale), rotAngle, rotationAxis), position);
 		MVP = projection * (view * model);
+		ITM = glm::transpose(glm::inverse(model));
 
-		shader.SetMatrix4x4("gMVP", MVP);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		shader.SetMatrix4x4("u_MVP", MVP);
+		shader.SetMatrix4x4("u_ITM", ITM);
+		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);
 

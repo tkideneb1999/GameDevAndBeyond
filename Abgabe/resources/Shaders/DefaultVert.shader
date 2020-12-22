@@ -1,16 +1,19 @@
 #version 460
 
-layout(location = 0) in vec3 Position;
-layout(location = 1) in vec3 Normal;
-layout(location = 2) in vec4 VertexColor;
-layout(location = 3) in vec2 Texcoord1;
+layout(location = 0) in vec3 vPosition;
+layout(location = 1) in vec3 vNormal;
+layout(location = 2) in vec4 vColor;
+layout(location = 3) in vec2 vTexcoord1;
 
-out vec4 Color;
+out vec3 fNormal;
+out vec4 fColor;
 
-uniform mat4 gMVP;
+uniform mat4 u_MVP;
+uniform mat4 u_ITM;
 
 void main()
 {
-	gl_Position = gMVP * vec4(Position.x, Position.y, Position.z, 1.0);
-	Color = vec4(1.0, 1.0, 1.0, 1.0);
+	gl_Position = u_MVP * vec4(vPosition.x, vPosition.y, vPosition.z, 1.0);
+	fColor = vec4(1.0, 1.0, 1.0, 1.0);
+	fNormal = (u_ITM * vec4(vNormal, 0.0)).xyz;
 }
