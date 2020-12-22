@@ -110,6 +110,8 @@ int main()
 	//MVP Matrix
 	glm::mat4x4 MVP;
 	glm::mat4x4 ITM;
+
+	glm::vec3 mainLightDir(1.0f, 0.0f, 0.0f);
 	
 	//Depth Testing
 	glEnable(GL_DEPTH_TEST);
@@ -159,6 +161,7 @@ int main()
 
 		shader.SetMatrix4x4("u_MVP", MVP);
 		shader.SetMatrix4x4("u_ITM", ITM);
+		shader.SetUniform3f("u_MainLightDir", mainLightDir);
 		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);
