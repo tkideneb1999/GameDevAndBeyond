@@ -51,7 +51,7 @@ namespace WavefrontSerialization
 				linestream >> ref.y;
 				linestream >> ref.z;
 #ifdef _DEBUG
-				std::cout << "VertexPosition detected, with Positions: x: " << ref.x << " y: " << ref.y << " z: " << ref.z << std::endl;
+				//std::cout << "VertexPosition detected, with Positions: x: " << ref.x << " y: " << ref.y << " z: " << ref.z << std::endl;
 #endif
 			}
 
@@ -63,7 +63,7 @@ namespace WavefrontSerialization
 				linestream >> ref.x;
 				linestream >> ref.y;
 #ifdef _DEBUG
-				std::cout << "VertexUV detected, with Coordinates: x: " << ref.x << " y: " << ref.y << std::endl;
+				//std::cout << "VertexUV detected, with Coordinates: x: " << ref.x << " y: " << ref.y << std::endl;
 #endif
 			}
 
@@ -76,7 +76,7 @@ namespace WavefrontSerialization
 				linestream >> ref.y;
 				linestream >> ref.z;
 #ifdef _DEBUG
-				std::cout << "VertexNormal detected, with values: x: " << ref.x << " y: " << ref.y << " z: " << ref.z << std::endl;
+				//std::cout << "VertexNormal detected, with values: x: " << ref.x << " y: " << ref.y << " z: " << ref.z << std::endl;
 #endif
 			}
 

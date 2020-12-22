@@ -28,11 +28,6 @@ int main()
 		return -1;
 	}
 
-	//object serialization
-	//std::vector<Vertex> vertices;
-	//std::vector<unsigned int> indices;
-	//WavefrontSerialization::LoadWavefront("../resources/cube.obj", vertices, indices);
-
 	// int* var : declares pointer -> stores address to variable
 	// *var		: dereferences pointer -> can change value
 	// int var2 : declares variable on stack
@@ -63,15 +58,33 @@ int main()
 
 	RenderingUtils::printVersion();
 
-	glm::vec3 testVertices[4];
-	testVertices[0] = glm::vec3(-1.0f, -1.0f, 0.0f);
-	testVertices[1] = glm::vec3(-1.0f, 1.0f, 0.0f);
-	testVertices[2] = glm::vec3(1.0f, 1.0f, 0.0f);
-	testVertices[3] = glm::vec3(1.0f, -1.0f, 0.0f);
+	std::vector<Vertex> testVertices;
+	testVertices.resize(4);
+	testVertices[0].position = glm::vec3(-1.0f, -1.0f, 0.0f);
+	testVertices[1].position = glm::vec3(-1.0f, 1.0f, 0.0f);
+	testVertices[2].position = glm::vec3(1.0f, 1.0f, 0.0f);
+	testVertices[3].position = glm::vec3(1.0f, -1.0f, 0.0f);
+	testVertices[0].normal = glm::vec3(0.0f, 0.0f, 1.0f);
+	testVertices[1].normal = glm::vec3(0.0f, 0.0f, 1.0f);
+	testVertices[2].normal = glm::vec3(0.0f, 0.0f, 1.0f);
+	testVertices[3].normal = glm::vec3(0.0f, 0.0f, 1.0f);
+	testVertices[0].color = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f); // purple
+	testVertices[1].color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f); // white
+	testVertices[2].color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f); // red
+	testVertices[3].color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f); // white
+	testVertices[0].texcoord1 = glm::vec2(0.0f, 0.0f);
+	testVertices[1].texcoord1 = glm::vec2(0.0f, 1.0f);
+	testVertices[2].texcoord1 = glm::vec2(1.0f, 1.0f);
+	testVertices[3].texcoord1 = glm::vec2(1.0f, 0.0f);
 
-	unsigned int indices[] = {
+	std::vector<unsigned int> testIndices = {
 		0, 1, 2, 
 		0, 2, 3,};
+
+	//object serialization
+	std::vector<Vertex> vertices;
+	std::vector<unsigned int> indices;
+	WavefrontSerialization::LoadWavefront("../resources/cube.obj", vertices, indices);
 
 	//Model
 	glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -80,36 +93,38 @@ int main()
 	float uniformScale = 0.5f;
 	glm::vec3 scale = glm::vec3(uniformScale);
 	
-	glm::mat4x4 model = glm::translate(glm::rotate(glm::scale(glm::mat4(1.0f), scale), rotAngle, rotationAxis), position);
+	glm::mat4x4 model;
 
 	//View
-	glm::vec3 CamPosition = glm::vec3(-10.0f, 0.0f, 1.0f);
-	glm::vec3 camRotAxis = glm::vec3(1.0f, 0.0f, 0.0f);
-	float camRotAngle = glm::radians(-20.0f);
+	glm::vec3 CamPosition = glm::vec3(0.0f, -3.0f, -3.0f);
+	glm::mat4x4 view = glm::lookAt(CamPosition, position, glm::vec3(0.0f, 1.0f, 0.0f));
 
-	glm::mat4x4 view = glm::translate(glm::rotate(glm::mat4(1.0f), camRotAngle, camRotAxis), position);
+	
 
 	//Projection
 	int width, height;
 	glfwGetWindowSize(window, &width, &height);
-	float aspectRatio = (float)width / height;
-	glm::mat4x4 projection = glm::perspective(90.0f, aspectRatio, 0.01f, 100.0f);
+	float aspectRatio = (float)width / (float)height;
+	glm::mat4x4 projection = glm::perspective(glm::radians(45.0f), aspectRatio, 0.01f, 100.0f);
 
-	glm::mat4x4 MVP = model * view * projection;
+	glm::mat4x4 MVP;
 	
-
+	//Vertex Buffer
 	GLuint VBO;
 	glGenBuffers(1, &VBO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(testVertices), testVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * testVertices.size(), testVertices.data(), GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
 
+	//Index Buffer
 	GLuint IBO;
 	glGenBuffers(1, &IBO);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * testIndices.size(), testIndices.data(), GL_STATIC_DRAW);
 
 	Shader shader("../Abgabe/resources/Shaders/DefaultVert.shader", "../Abgabe/resources/Shaders/DefaultFrag.shader");
 
@@ -121,10 +136,17 @@ int main()
 
 		
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)12);
+		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)24);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glFrontFace(GL_CW);
+
 		shader.EnableShader();
-		shader.SetUniform1f("gScale", 0.5f * sinf(time) + 0.5f);
+		rotAngle = glm::radians((time * 100));
+		model = glm::translate(glm::rotate(glm::scale(glm::mat4(1.0f), scale), rotAngle, rotationAxis), position);
+		MVP = projection * (view * model);
+
 		shader.SetMatrix4x4("gMVP", MVP);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
