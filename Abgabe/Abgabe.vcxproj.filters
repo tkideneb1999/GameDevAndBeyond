@@ -36,13 +36,16 @@
     <ClCompile Include="ThirdParty\glm\detail\glm.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="src\Rendering\Mesh.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="src\Rendering\Shader.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="src\Rendering\Transform.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Camera.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Mesh.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -917,9 +920,6 @@
     <ClInclude Include="src\objSerialization\WavefrontSerialization.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\Rendering\Mesh.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="src\Rendering\Shader.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
@@ -930,6 +930,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\Camera.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Mesh.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

@@ -15,12 +15,13 @@ class Shader
 public:
 	Shader(const char* vertShaderPath, const char* fragShaderPath);
 	Shader();
+	~Shader();
 
 	void EnableShader();
 private:
 
 	GLuint m_ShaderProgram;
-	std::unordered_map<const char*, GLuint> uniformMap;
+	std::unordered_map<const char*, GLuint> m_UniformMap;
 
 	const GLchar* LoadSource(const char* filePath);
 

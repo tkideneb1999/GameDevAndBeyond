@@ -10,5 +10,5 @@ uniform vec3 u_MainLightDir;
 void main()
 {
 	float lambert = clamp(dot(fNormal, u_MainLightDir), 0, 1);
-	finalColor = vec4(lambert.xxx, 1.0);
+	finalColor = vec4(1.0, 0.0, 0.0, 1.0);
 }

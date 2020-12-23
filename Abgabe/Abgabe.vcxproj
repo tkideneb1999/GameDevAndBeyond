@@ -167,6 +167,7 @@
     <ClCompile Include="src\ComponentManager.cpp" />
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Rendering\Camera.cpp" />
     <ClCompile Include="src\Rendering\Mesh.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
     <ClCompile Include="src\Rendering\Transform.cpp" />

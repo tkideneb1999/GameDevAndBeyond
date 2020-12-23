@@ -20,11 +20,36 @@ Shader::Shader(const char* vertShaderPath, const char* fragShaderPath)
 
 	glDetachShader(m_ShaderProgram, fragShader);
 	glDeleteShader(fragShader);
+	std::cout << "Creating Shader" << std::endl;
 }
 
 Shader::Shader()
 {
-	Shader("../resources/Shaders/DefaultVert.shader", "../resources/Shaders/DefaultFrag.shader");
+	m_ShaderProgram = glCreateProgram();
+
+	GLuint vertShader = CreateShader("../Abgabe/resources/Shaders/DefaultVert.shader", GL_VERTEX_SHADER);
+	GLuint fragShader = CreateShader("../Abgabe/resources/Shaders/DefaultFrag.shader", GL_FRAGMENT_SHADER);
+
+	glAttachShader(m_ShaderProgram, vertShader);
+	glAttachShader(m_ShaderProgram, fragShader);
+
+	glLinkProgram(m_ShaderProgram);
+#ifdef _DEBUG
+	CheckShaderLinkingResult(m_ShaderProgram);
+#endif
+
+	glDetachShader(m_ShaderProgram, vertShader);
+	glDeleteShader(vertShader);
+
+	glDetachShader(m_ShaderProgram, fragShader);
+	glDeleteShader(fragShader);
+	std::cout << "Creating Shader" << std::endl;
+}
+
+Shader::~Shader()
+{
+	glDeleteProgram(m_ShaderProgram);
+	std::cout << "Deleting Shader" << std::endl;
 }
 
 void Shader::EnableShader()
@@ -103,14 +128,14 @@ GLuint Shader::CreateShader(const char* sourcePath, GLenum type)
 
 GLuint Shader::CacheUniformLocation(const char* name)
 {
-	auto it = uniformMap.find(name);
-	if (it == uniformMap.end())
+	auto it = m_UniformMap.find(name);
+	if (it == m_UniformMap.end())
 	{
 		GLuint uniformLocation = glGetUniformLocation(m_ShaderProgram, name);
-		uniformMap.insert(std::make_pair(name, uniformLocation));
+		m_UniformMap.insert(std::make_pair(name, uniformLocation));
 	}
 
-	return uniformMap[name];
+	return m_UniformMap[name];
 }
 
 void Shader::SetUniform1f(const char* name, float value)
