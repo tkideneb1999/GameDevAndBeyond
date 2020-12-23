@@ -169,6 +169,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Rendering\Mesh.cpp" />
     <ClCompile Include="src\Rendering\Shader.cpp" />
+    <ClCompile Include="src\Rendering\Transform.cpp" />
     <ClCompile Include="src\RenderSystem.cpp" />
     <ClCompile Include="src\TypeID.cpp" />
     <ClCompile Include="ThirdParty\glm\detail\glm.cpp" />
@@ -179,9 +180,11 @@
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\json.hpp" />
     <ClInclude Include="src\objSerialization\WavefrontSerialization.h" />
+    <ClInclude Include="src\Rendering\Camera.h" />
     <ClInclude Include="src\Rendering\Mesh.h" />
     <ClInclude Include="src\Rendering\RenderingUtils.h" />
     <ClInclude Include="src\Rendering\Shader.h" />
+    <ClInclude Include="src\Rendering\Transform.h" />
     <ClInclude Include="src\RenderSystem.h" />
     <ClInclude Include="src\TypeID.h" />
     <ClInclude Include="src\Rendering\Vertex.h" />
