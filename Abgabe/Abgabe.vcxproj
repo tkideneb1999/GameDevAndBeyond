@@ -473,6 +473,8 @@
     <ClInclude Include="ThirdParty\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\Shaders\ColorFrag.shader" />
+    <None Include="resources\Shaders\ColorVert.shader" />
     <None Include="resources\Shaders\DefaultFrag.shader" />
     <None Include="resources\Shaders\DefaultVert.shader" />
     <None Include="ThirdParty\glm\detail\func_common.inl" />

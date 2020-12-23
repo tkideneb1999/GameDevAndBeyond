@@ -79,4 +79,6 @@ void Mesh::DrawMesh(Camera camera)
 	shader.SetMatrix4x4("u_ITM", m_ITM);
 
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
+
+	shader.DisableShader();
 }

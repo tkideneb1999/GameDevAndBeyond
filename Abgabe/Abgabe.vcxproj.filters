@@ -1347,5 +1347,7 @@
     </None>
     <None Include="resources\Shaders\DefaultFrag.shader" />
     <None Include="resources\Shaders\DefaultVert.shader" />
+    <None Include="resources\Shaders\ColorVert.shader" />
+    <None Include="resources\Shaders\ColorFrag.shader" />
   </ItemGroup>
 </Project>

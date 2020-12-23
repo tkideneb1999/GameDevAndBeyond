@@ -5,15 +5,11 @@ layout(location = 1) in vec3 vNormal;
 layout(location = 2) in vec4 vColor;
 layout(location = 3) in vec2 vTexcoord1;
 
-out vec3 fNormal;
-out vec4 fColor;
 
 uniform mat4 u_MVP;
 uniform mat4 u_ITM;
 
 void main()
 {
-	gl_Position = u_MVP * vec4(vPosition.x, vPosition.y, vPosition.z, 1.0);
-	fColor = vec4(clamp(vPosition, 0, 1), 1.0);
-	fNormal = (u_ITM * vec4(vNormal, 0.0)).xyz;
+	gl_Position = u_MVP * vec4(vPosition, 1.0);
 }

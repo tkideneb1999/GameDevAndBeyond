@@ -18,6 +18,7 @@ public:
 	~Shader();
 
 	void EnableShader();
+	void DisableShader();
 private:
 
 	GLuint m_ShaderProgram;
@@ -37,5 +38,6 @@ public:
 	void SetUniform1f(const char* name, float value);
 	void SetUniform2f(const char* name, glm::vec2 value);
 	void SetUniform3f(const char* name, glm::vec3 value);
+	void SetUniform4f(const char* name, glm::vec4 value);
 	void SetMatrix4x4(const char* name, glm::mat4x4);
 };

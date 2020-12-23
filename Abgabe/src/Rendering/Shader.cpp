@@ -60,6 +60,11 @@ void Shader::EnableShader()
 	glUseProgram(m_ShaderProgram);
 }
 
+void Shader::DisableShader()
+{
+	glUseProgram(0);
+}
+
 const GLchar* Shader::LoadSource(const char* filePath)
 {
 	std::ifstream fileStream(filePath);
@@ -116,6 +121,10 @@ GLuint Shader::CreateShader(const char* sourcePath, GLenum type)
 	const GLchar* source = LoadSource(sourcePath);
 	GLint sourceLength = strlen(source);
 
+#ifdef _DEBUG
+	std::cout << "Compiling Shader from: " << sourcePath << std::endl;
+#endif
+
 	glShaderSource(shaderHandle, 1, &source, &sourceLength);
 	glCompileShader(shaderHandle);
 	delete[] source;
@@ -151,6 +160,11 @@ void Shader::SetUniform2f(const char* name, glm::vec2 value)
 void Shader::SetUniform3f(const char* name, glm::vec3 value)
 {
 	glUniform3f(CacheUniformLocation(name), value.x, value.y, value.z);
+}
+
+void Shader::SetUniform4f(const char* name, glm::vec4 value)
+{
+	glUniform4f(CacheUniformLocation(name), value.x, value.y, value.z, value.w);
 }
 
 void Shader::SetMatrix4x4(const char* name, glm::mat4x4 value)

@@ -63,8 +63,8 @@ int main()
 	glDepthFunc(GL_LESS);
 
 	glFrontFace(GL_CCW);
-	glCullFace(GL_BACK);
-	glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
+	//glEnable(GL_CULL_FACE);
 
 	int width, height;
 	glfwGetWindowSize(window, &width, &height);
@@ -73,10 +73,15 @@ int main()
 	std::cout << "Aspect Ratio: " << aspectRatio << std::endl;
 
 	Camera camera(45.0f, aspectRatio, 0.01f, 100.0f);
-	camera.transform.transform = glm::lookAt(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	camera.transform.transform = glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 5.0f)), glm::radians(-10.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
-	Mesh mesh("../resources/suzanne.obj");
-	mesh.transform.SetPosition(glm::vec3(0.0f, -3.0f, 0.0f));
+	Mesh mesh("../resources/sphere.obj");
+	mesh.transform.SetPosition(glm::vec3(0.0f, -2.0f, 0.0f));
+
+	Mesh plane("../resources/plane.obj");
+	plane.transform.SetPosition(glm::vec3(0.0f, -2.0f, 0.0f));
+	plane.SetShader("../Abgabe/resources/Shaders/ColorVert.shader", "../Abgabe/resources/Shaders/ColorFrag.shader");
+	plane.shader.SetUniform4f("u_Color", glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 
 	float time = 0;
 
@@ -84,7 +89,9 @@ int main()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		mesh.transform.RotateAroundAxis(glm::vec3(0.0f, 1.0f, 1.0f), glm::radians(time * 100));
+
+		plane.DrawMesh(camera);
+		mesh.transform.RotateAroundAxis(glm::vec3(0.0f, 1.0f, 1.0f), glm::radians(1.0f));
 		mesh.DrawMesh(camera);
 
 		glfwSwapBuffers(window);
