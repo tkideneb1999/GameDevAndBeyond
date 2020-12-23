@@ -22,6 +22,11 @@ Shader::Shader(const char* vertShaderPath, const char* fragShaderPath)
 	glDeleteShader(fragShader);
 }
 
+Shader::Shader()
+{
+	Shader("../resources/Shaders/DefaultVert.shader", "../resources/Shaders/DefaultFrag.shader");
+}
+
 void Shader::EnableShader()
 {
 #ifdef _DEBUG

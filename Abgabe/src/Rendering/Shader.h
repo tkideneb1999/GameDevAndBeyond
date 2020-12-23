@@ -14,6 +14,7 @@ class Shader
 {
 public:
 	Shader(const char* vertShaderPath, const char* fragShaderPath);
+	Shader();
 
 	void EnableShader();
 private:

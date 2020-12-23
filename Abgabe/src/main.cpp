@@ -110,7 +110,7 @@ int main()
 	//MVP Matrix
 	glm::mat4x4 MVP;
 	glm::mat4x4 ITM;
-
+	
 	glm::vec3 mainLightDir(1.0f, 0.0f, 0.0f);
 	
 	//Depth Testing
