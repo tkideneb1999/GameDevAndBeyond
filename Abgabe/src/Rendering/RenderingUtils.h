@@ -6,7 +6,7 @@
 
 namespace RenderingUtils
 {
-	void printVersion()
+	void printInfo()
 	{
 		GLint versionMajor, versionMinor;
 
@@ -15,6 +15,8 @@ namespace RenderingUtils
 
 		std::cout << "OpenGL Version: " << versionMajor << "." << versionMinor << std::endl;
 		std::cout << std::endl;
+        std::cout << "Graphics Card Vendor: " << glGetString(GL_VENDOR) << std::endl;
+        std::cout << "Graphics Card Name: " << glGetString(GL_RENDERER) << std::endl;
 	}
 
 	void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei length, const char* message, const void* userParam)

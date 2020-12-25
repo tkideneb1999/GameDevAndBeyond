@@ -9,6 +9,7 @@
 #include "Rendering/RenderingUtils.h"
 #include "Rendering/Camera.h"
 #include "Rendering/Mesh.h"
+#include "InputHandler.h"
 
 int main()
 {
@@ -24,7 +25,7 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_CORE_PROFILE, true);
 
 	//Create a windowed mode window and its OpenGL Context
-	window = glfwCreateWindow(1280, 720, "GLFW", nullptr, nullptr);
+	window = glfwCreateWindow(1280, 720, "Open GL Renderer", nullptr, nullptr);
 	if (!window)
 	{
 		glfwTerminate();
@@ -55,12 +56,18 @@ int main()
 	// Make the window's context current
 	glfwMakeContextCurrent(window);
 
+	//Input Handling
+	InputHandler inputHandler;
+	glfwSetKeyCallback(window, inputHandler.KeyCallback);
+	glfwSetCursorPosCallback(window, inputHandler.CursorPosCallback);
+	glfwSetMouseButtonCallback(window, inputHandler.MouseButtonCallback);
+
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
 		std::cout << "Error: " << glewGetErrorString(err) << std::endl;
 
-	// Debug Messaging System
 #ifdef _DEBUG
+	// Debug Messaging System
 	GLint openGLFlags;
 	glGetIntegerv(GL_CONTEXT_FLAGS, &openGLFlags);
 	if (openGLFlags & GL_CONTEXT_FLAG_DEBUG_BIT)
@@ -70,35 +77,41 @@ int main()
 		glDebugMessageCallback(RenderingUtils::glDebugOutput, nullptr);
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
 	}
-#endif
 
-	RenderingUtils::printVersion();
-	
-	glm::vec3 mainLightDir(1.0f, 0.0f, 0.0f);
+	//Print Info
+	RenderingUtils::printInfo();
+#endif
 	
 	//OpenGL Setup
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
 	glFrontFace(GL_CCW);
-	//glCullFace(GL_BACK);
-	//glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
 
+	//Camera Setup
 	int width, height;
 	glfwGetWindowSize(window, &width, &height);
 	float aspectRatio = (float)width / (float)height;
 
-	std::cout << "Aspect Ratio: " << aspectRatio << std::endl;
-
 	Camera camera(45.0f, aspectRatio, 0.01f, 100.0f);
 	camera.transform.transform = glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 5.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
+	glm::vec3 mainLightDir(1.0f, 0.0f, 0.0f);
+
+	//Meshes
 	Mesh plane("../resources/plane.obj");
 	plane.transform.SetPosition(glm::vec3(0.0f, -2.0f, 0.0f));
+	plane.transform.SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
 	plane.SetShader("../Abgabe/resources/Shaders/ColorVert.shader", "../Abgabe/resources/Shaders/ColorFrag.shader");
 
 	Mesh suzanne("../resources/suzanne.obj");
+	suzanne.SetShader("../Abgabe/resources/Shaders/LambertVert.shader", "../Abgabe/resources/Shaders/LambertFrag.shader");
+	suzanne.shader->SetUniform3f("u_LightDir", mainLightDir);
+	suzanne.shader->SetUniform4f("u_Color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
+	//Render Loop
 	while (!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

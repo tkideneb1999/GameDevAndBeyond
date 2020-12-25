@@ -48,6 +48,9 @@
     <ClCompile Include="src\Rendering\Mesh.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="src\InputHandler.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\json.hpp">
@@ -935,6 +938,9 @@
     <ClInclude Include="src\Rendering\Mesh.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="src\InputHandler.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ThirdParty\glm\detail\func_common.inl">
@@ -1349,5 +1355,7 @@
     <None Include="resources\Shaders\DefaultVert.shader" />
     <None Include="resources\Shaders\ColorVert.shader" />
     <None Include="resources\Shaders\ColorFrag.shader" />
+    <None Include="resources\Shaders\LambertVert.shader" />
+    <None Include="resources\Shaders\LambertFrag.shader" />
   </ItemGroup>
 </Project>

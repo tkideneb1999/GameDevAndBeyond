@@ -166,6 +166,7 @@
     <ClCompile Include="src\Component.cpp" />
     <ClCompile Include="src\ComponentManager.cpp" />
     <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\InputHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Rendering\Camera.cpp" />
     <ClCompile Include="src\Rendering\Mesh.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="src\Component.h" />
     <ClInclude Include="src\ComponentManager.h" />
     <ClInclude Include="src\Entity.h" />
+    <ClInclude Include="src\InputHandler.h" />
     <ClInclude Include="src\json.hpp" />
     <ClInclude Include="src\objSerialization\WavefrontSerialization.h" />
     <ClInclude Include="src\Rendering\Camera.h" />
@@ -477,6 +479,8 @@
     <None Include="resources\Shaders\ColorVert.shader" />
     <None Include="resources\Shaders\DefaultFrag.shader" />
     <None Include="resources\Shaders\DefaultVert.shader" />
+    <None Include="resources\Shaders\LambertFrag.shader" />
+    <None Include="resources\Shaders\LambertVert.shader" />
     <None Include="ThirdParty\glm\detail\func_common.inl" />
     <None Include="ThirdParty\glm\detail\func_common_simd.inl" />
     <None Include="ThirdParty\glm\detail\func_exponential.inl" />
