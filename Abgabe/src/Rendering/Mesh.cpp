@@ -3,7 +3,7 @@
 #include "../objSerialization/WavefrontSerialization.h"
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
-	:shader(), transform()
+	:shader(new Shader()), transform()
 {
 	m_vertices = vertices;
 	m_indices = indices;
@@ -11,7 +11,7 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
 }
 
 Mesh::Mesh(const char* modelPath)
-	:shader(), transform()
+	:shader(new Shader()), transform()
 {
 	WavefrontSerialization::LoadWavefront(modelPath, m_vertices, m_indices);
 	GenerateBuffers();
@@ -30,11 +30,14 @@ Mesh::~Mesh()
 
 	//Delete VAO
 	glDeleteVertexArrays(1, &m_VAOHandle);
+
+	delete shader;
 }
 
 void Mesh::SetShader(const char* vertShaderPath, const char* fragShaderPath)
 {
-	shader = Shader(vertShaderPath, fragShaderPath);
+	delete shader;
+	shader = new Shader(vertShaderPath, fragShaderPath);
 }
 
 inline void Mesh::GenerateBuffers()
@@ -68,17 +71,17 @@ inline void Mesh::GenerateBuffers()
 void Mesh::DrawMesh(Camera camera)
 {
 	glBindVertexArray(m_VAOHandle);
-	shader.EnableShader();
+	shader->EnableShader();
 
 	//Update Matrices
 	m_MVP = camera.Projection() * (camera.ViewMatrix() * transform.transform);
 	m_ITM = glm::transpose(glm::inverse(transform.transform));
 
 	//Set Uniform Matrices
-	shader.SetMatrix4x4("u_MVP", m_MVP);
-	shader.SetMatrix4x4("u_ITM", m_ITM);
+	shader->SetMatrix4x4("u_MVP", m_MVP);
+	shader->SetMatrix4x4("u_ITM", m_ITM);
 
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
 
-	shader.DisableShader();
+	shader->DisableShader();
 }

@@ -25,6 +25,7 @@ Shader::Shader(const char* vertShaderPath, const char* fragShaderPath)
 
 Shader::Shader()
 {
+	std::cout << "Creating Shader" << std::endl;
 	m_ShaderProgram = glCreateProgram();
 
 	GLuint vertShader = CreateShader("../Abgabe/resources/Shaders/DefaultVert.shader", GL_VERTEX_SHADER);
@@ -43,7 +44,6 @@ Shader::Shader()
 
 	glDetachShader(m_ShaderProgram, fragShader);
 	glDeleteShader(fragShader);
-	std::cout << "Creating Shader" << std::endl;
 }
 
 Shader::~Shader()
@@ -164,7 +164,9 @@ void Shader::SetUniform3f(const char* name, glm::vec3 value)
 
 void Shader::SetUniform4f(const char* name, glm::vec4 value)
 {
+	glUseProgram(m_ShaderProgram);
 	glUniform4f(CacheUniformLocation(name), value.x, value.y, value.z, value.w);
+	glUseProgram(0);
 }
 
 void Shader::SetMatrix4x4(const char* name, glm::mat4x4 value)

@@ -25,7 +25,7 @@ private:
 
 public:
 	Transform transform;
-	Shader shader;
+	Shader* shader;
 
 private:
 	inline void GenerateBuffers();
