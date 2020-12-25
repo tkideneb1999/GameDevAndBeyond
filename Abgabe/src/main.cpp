@@ -18,6 +18,10 @@ int main()
 	if (!glfwInit())
 		return -1;
 
+#ifdef _DEBUG
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
+#endif
+
 	//Create a windowed mode window and its OpenGL Context
 	window = glfwCreateWindow(1280, 720, "GLFW", nullptr, nullptr);
 	if (!window)
@@ -54,6 +58,18 @@ int main()
 	if (GLEW_OK != err)
 		std::cout << "Error: " << glewGetErrorString(err) << std::endl;
 
+#ifdef _DEBUG
+	GLint openGLFlags;
+	glGetIntegerv(GL_CONTEXT_FLAGS, &openGLFlags);
+	if (openGLFlags & GL_CONTEXT_FLAG_DEBUG_BIT)
+	{
+		glEnable(GL_DEBUG_OUTPUT);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		glDebugMessageCallback(RenderingUtils::glDebugOutput, nullptr);
+		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+	}
+#endif
+
 	RenderingUtils::printVersion();
 	
 	glm::vec3 mainLightDir(1.0f, 0.0f, 0.0f);
@@ -75,13 +91,12 @@ int main()
 	Camera camera(45.0f, aspectRatio, 0.01f, 100.0f);
 	camera.transform.transform = glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 5.0f)), glm::radians(-10.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
-	Mesh mesh("../resources/sphere.obj");
+	Mesh mesh("../resources/suzanne.obj");
 	mesh.transform.SetPosition(glm::vec3(0.0f, -2.0f, 0.0f));
 
 	Mesh plane("../resources/plane.obj");
 	plane.transform.SetPosition(glm::vec3(0.0f, -2.0f, 0.0f));
-	plane.SetShader("../Abgabe/resources/Shaders/ColorVert.shader", "../Abgabe/resources/Shaders/ColorFrag.shader");
-	plane.shader.SetUniform4f("u_Color", glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+	//plane.SetShader("../Abgabe/resources/Shaders/ColorVert.shader", "../Abgabe/resources/Shaders/ColorFrag.shader");
 
 	float time = 0;
 
@@ -90,6 +105,7 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
+		//plane.shader.SetUniform4f("u_Color", glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 		plane.DrawMesh(camera);
 		mesh.transform.RotateAroundAxis(glm::vec3(0.0f, 1.0f, 1.0f), glm::radians(1.0f));
 		mesh.DrawMesh(camera);

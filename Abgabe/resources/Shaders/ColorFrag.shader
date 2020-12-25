@@ -6,5 +6,5 @@ uniform vec4 u_Color;
 
 void main()
 {
-	finalColor = u_Color;
+	finalColor = vec4(0.0, 1.0, 0.0, 1.0);
 }
