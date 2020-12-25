@@ -13,12 +13,16 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
 Mesh::Mesh(const char* modelPath)
 	:shader(new Shader()), transform()
 {
+	std::cout << "----------------------" << std::endl;
+	std::cout << "Loading Model" << std::endl;
 	WavefrontSerialization::LoadWavefront(modelPath, m_vertices, m_indices);
 	GenerateBuffers();
 }
 
 Mesh::~Mesh()
 {
+	std::cout << "----------------------" << std::endl;
+	std::cout << "Deleting Mesh" << std::endl;
 	//Disable Generic Vertex Attributes
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
@@ -48,7 +52,7 @@ inline void Mesh::GenerateBuffers()
 
 	//Generate & Bind Vertex Buffer to VAO
 	glGenBuffers(1, &m_VBOHandle);
-	glBindBuffer(GL_ARRAY_BUFFER, m_VAOHandle);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOHandle);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * m_vertices.size(), m_vertices.data(), GL_STATIC_DRAW);
 
 	//Enable Generic Vertex Attributes (0 = Position, 1 = Normal, 2 = Color, 3 = TexCoord1)
@@ -68,9 +72,11 @@ inline void Mesh::GenerateBuffers()
 	glBindVertexArray(0);
 }
 
-void Mesh::DrawMesh(Camera camera)
+void Mesh::DrawMesh(Camera& camera)
 {
 	glBindVertexArray(m_VAOHandle);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOHandle);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOHandle);
 	shader->EnableShader();
 
 	//Update Matrices

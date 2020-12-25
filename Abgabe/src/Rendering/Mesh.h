@@ -36,5 +36,5 @@ public:
 
 	void SetShader(const char* vertShaderPath, const char* fragShaderPath);
 	
-	void DrawMesh(Camera camera);
+	void DrawMesh(Camera& camera);
 };

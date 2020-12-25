@@ -2,6 +2,8 @@
 
 Shader::Shader(const char* vertShaderPath, const char* fragShaderPath)
 {
+	std::cout << "----------------------" << std::endl;
+	std::cout << "Creating Shader" << std::endl;
 	m_ShaderProgram = glCreateProgram();
 
 	GLuint vertShader = CreateShader(vertShaderPath, GL_VERTEX_SHADER);
@@ -20,11 +22,11 @@ Shader::Shader(const char* vertShaderPath, const char* fragShaderPath)
 
 	glDetachShader(m_ShaderProgram, fragShader);
 	glDeleteShader(fragShader);
-	std::cout << "Creating Shader" << std::endl;
 }
 
 Shader::Shader()
 {
+	std::cout << "----------------------" << std::endl;
 	std::cout << "Creating Shader" << std::endl;
 	m_ShaderProgram = glCreateProgram();
 
@@ -48,8 +50,9 @@ Shader::Shader()
 
 Shader::~Shader()
 {
-	glDeleteProgram(m_ShaderProgram);
+	std::cout << "----------------------" << std::endl;
 	std::cout << "Deleting Shader" << std::endl;
+	glDeleteProgram(m_ShaderProgram);
 }
 
 void Shader::EnableShader()
