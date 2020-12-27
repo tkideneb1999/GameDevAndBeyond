@@ -5,13 +5,6 @@
 #include "GLFW/glfw3.h"
 
 namespace InputHandling {
-	enum InputModEnum
-	{
-		IME_NONE = 0,
-		IME_SHIFT = 1,
-		IME_ALT = 2,
-		IME_CTRL = 3
-	};
 
 	enum InputPressEnum
 	{
@@ -20,10 +13,20 @@ namespace InputHandling {
 		IPE_REPEAT = 2
 	};
 
+	enum InputMouseButtonEnum
+	{
+		IMBE_LEFT = 0,
+		IMBE_RIGHT = 1,
+		IMBE_MIDDLE = 2,
+		IMBE_OTHER = 3
+	};
+
 	class InputHandler
 	{
 	private:
-		static std::vector<void(*)(const char*, InputPressEnum, InputModEnum)> m_KeyObservers;
+		static std::vector<void(*)(const char*, InputPressEnum, int)> m_KeyObservers;
+		static std::vector<void(*)(double, double)> m_CursorPosObservers;
+		static std::vector<void(*)(InputMouseButtonEnum, InputPressEnum, int mods)> m_MouseButtonOberservers;
 
 	public:
 		static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
