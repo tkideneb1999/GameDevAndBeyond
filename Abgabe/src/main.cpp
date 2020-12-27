@@ -66,19 +66,17 @@ int main()
 
 	//Input Handling
 	InputHandling::InputHandler inputHandler;
-
+	
 	glfwSetKeyCallback(window, inputHandler.KeyCallback);
 	glfwSetCursorPosCallback(window, inputHandler.CursorPosCallback);
 	glfwSetMouseButtonCallback(window, inputHandler.MouseButtonCallback);
-
-	//inputHandler.AddKeyObserver(printKey);
 
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
 		std::cout << "Error: " << glewGetErrorString(err) << std::endl;
 
-#ifdef _DEBUG
 	// Debug Messaging System
+#ifdef _DEBUG
 	GLint openGLFlags;
 	glGetIntegerv(GL_CONTEXT_FLAGS, &openGLFlags);
 	if (openGLFlags & GL_CONTEXT_FLAG_DEBUG_BIT)

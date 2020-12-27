@@ -2,6 +2,9 @@
 
 #include <iostream>
 namespace InputHandling {
+
+	std::vector<void(*)(const char*, InputPressEnum, InputModEnum)>InputHandler::m_KeyObservers;
+	
 	void InputHandler::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		InputPressEnum IPE = (InputPressEnum)action;
@@ -30,7 +33,7 @@ namespace InputHandling {
 
 	void InputHandler::CursorPosCallback(GLFWwindow* window, double xPos, double yPos)
 	{
-		std::cout << "Mouse Pos:" << xPos << ", " << yPos << std::endl;
+
 	}
 
 	void InputHandler::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
