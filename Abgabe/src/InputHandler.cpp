@@ -1,31 +1,40 @@
 #include "InputHandler.h"
 
 #include <iostream>
-
-void InputHandler::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	//std::cout << "Key " << glfwGetKeyName(key, scancode);
-	switch (action)
+namespace InputHandling {
+	void InputHandler::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
-	case GLFW_PRESS:
-		std::cout << " pressed.";
-		break;
-	case GLFW_REPEAT:
-		std::cout << " repeated.";
-		break;
-	case GLFW_RELEASE:
-		std::cout << " released.";
-		break;
+		InputPressEnum IPE = (InputPressEnum)action;
+		
+
+		InputModEnum IME;
+		switch (action)
+		{
+		case GLFW_MOD_SHIFT:
+			IME = IME_SHIFT; break;
+		case GLFW_MOD_ALT:
+			IME = IME_ALT; break;
+		case GLFW_MOD_CONTROL:
+			IME = IME_CTRL; break;
+		default:
+			IME = IME_NONE; break;
+		}
+
+		const char* pressedKey = glfwGetKeyName(key, scancode);
+
+		for(auto keyObserver : m_KeyObservers)
+		{
+			keyObserver(pressedKey, IPE, IME);
+		}
 	}
-	std::cout << std::endl;
-}
 
-void InputHandler::CursorPosCallback(GLFWwindow* window, double xPos, double yPos)
-{
-	std::cout << "Mouse Pos:" << xPos << ", " << yPos << std::endl;
-}
+	void InputHandler::CursorPosCallback(GLFWwindow* window, double xPos, double yPos)
+	{
+		std::cout << "Mouse Pos:" << xPos << ", " << yPos << std::endl;
+	}
 
-void InputHandler::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
-{
+	void InputHandler::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+	{
 
+	}
 }

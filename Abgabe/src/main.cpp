@@ -11,6 +11,14 @@
 #include "Rendering/Mesh.h"
 #include "InputHandler.h"
 
+void printKey(const char* key, InputHandling::InputPressEnum IPE, InputHandling::InputModEnum IME)
+{
+	if (key)
+	{
+		std::cout << "Key: " << key << std::endl;
+	}
+}
+
 int main()
 {
 	GLFWwindow* window;
@@ -57,10 +65,13 @@ int main()
 	glfwMakeContextCurrent(window);
 
 	//Input Handling
-	InputHandler inputHandler;
+	InputHandling::InputHandler inputHandler;
+
 	glfwSetKeyCallback(window, inputHandler.KeyCallback);
 	glfwSetCursorPosCallback(window, inputHandler.CursorPosCallback);
 	glfwSetMouseButtonCallback(window, inputHandler.MouseButtonCallback);
+
+	//inputHandler.AddKeyObserver(printKey);
 
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
