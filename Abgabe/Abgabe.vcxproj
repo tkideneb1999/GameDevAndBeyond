@@ -166,6 +166,7 @@
     <ClCompile Include="src\Component.cpp" />
     <ClCompile Include="src\ComponentManager.cpp" />
     <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\FPSCameraBehaviour.cpp" />
     <ClCompile Include="src\InputHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Rendering\Camera.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="src\Component.h" />
     <ClInclude Include="src\ComponentManager.h" />
     <ClInclude Include="src\Entity.h" />
+    <ClInclude Include="src\FPSCameraBehaviour.h" />
     <ClInclude Include="src\InputHandler.h" />
     <ClInclude Include="src\json.hpp" />
     <ClInclude Include="src\objSerialization\WavefrontSerialization.h" />

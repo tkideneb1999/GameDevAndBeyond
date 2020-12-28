@@ -132,5 +132,9 @@ int main()
 	}
 
 	glfwTerminate();
+
+#ifdef _DEBUG
+	std::cin.get();
+#endif
 	return 0;
 }

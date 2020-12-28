@@ -10,13 +10,12 @@ private:
 	glm::mat4x4 m_Projection;
 
 public:
-	Transform transform;
 	Camera(float aspectRatio);
 	Camera(float fovYangle, float aspectRatio, float zNear, float zFar);
 
 	void SetCameraData(float fovY, float aspectRatio, float zNear, float zFar);
 
-	inline glm::mat4x4 ViewMatrix()
+	inline glm::mat4x4 ViewMatrix(Transform transform)
 	{
 		return glm::inverse(transform.GetModelMatrix());
 	}

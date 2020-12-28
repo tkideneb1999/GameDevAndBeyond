@@ -51,6 +51,9 @@
     <ClCompile Include="src\InputHandler.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="src\FPSCameraBehaviour.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\json.hpp">
@@ -939,6 +942,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\InputHandler.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FPSCameraBehaviour.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
