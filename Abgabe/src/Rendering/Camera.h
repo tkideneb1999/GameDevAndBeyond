@@ -18,7 +18,7 @@ public:
 
 	inline glm::mat4x4 ViewMatrix()
 	{
-		return glm::inverse(transform.transform);
+		return glm::inverse(transform.GetModelMatrix());
 	}
 
 	glm::mat4x4 Projection()

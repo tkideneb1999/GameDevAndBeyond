@@ -3,64 +3,62 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 Transform::Transform()
+	:m_Position(0.0f, 0.0f, 0.0f), m_Rotation(), m_Scale(1.0f, 1.0f, 1.0f)
 {
-	transform = glm::mat4(1.0);
-	position = glm::vec3(0.0f, 0.0f, 0.0f);
-	rotation = glm::quat();
-	scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	ConstructMatrix();
 }
 
 Transform::Transform(glm::vec3 initPosition, glm::quat initRotation, glm::vec3 initScale)
-	:position(initPosition), rotation(initRotation), scale(initScale)
+	:m_Position(initPosition), m_Rotation(initRotation), m_Scale(initScale)
 {
 	ConstructMatrix();
 }
 
 void Transform::SetPosition(const glm::vec3 newPosition)
 {
-	position = newPosition;
+	m_Position = newPosition;
 	ConstructMatrix();
 }
 
 void Transform::SetRotation(glm::quat newRotation)
 {
-	rotation = newRotation;
+	m_Rotation = newRotation;
 	ConstructMatrix();
 }
 
 void Transform::SetScale(const glm::vec3 newScale)
 {
-	scale = newScale;
+	m_Scale = newScale;
 	ConstructMatrix();
 }
 
 void Transform::SetTransform(const glm::vec3 newPosition, const glm::vec3 newRotation, const glm::vec3 newScale)
 {
-	position = newPosition;
-	scale = newScale;
+	m_Position = newPosition;
+	m_Scale = newScale;
 
-	rotation = glm::rotate(glm::quat(), newRotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-	rotation = glm::rotate(rotation   , newRotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-	rotation = glm::rotate(rotation   , newRotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+	m_Rotation = glm::rotate(glm::quat()  , newRotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+	m_Rotation = glm::rotate(m_Rotation   , newRotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+	m_Rotation = glm::rotate(m_Rotation   , newRotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
 	ConstructMatrix();
 }
 
 void Transform::SetTransform(const glm::vec3 newPosition, const glm::quat newRotation, const glm::vec3 newScale)
 {
-	position = newPosition;
-	rotation = newRotation;
-	scale = newScale;
+	m_Position = newPosition;
+	m_Rotation = newRotation;
+	m_Scale = newScale;
 
 	ConstructMatrix();
 }
 
 void Transform::RotateAroundAxis(const glm::vec3& axis,const float& angleRadians)
 {
-	transform = glm::rotate(transform, angleRadians, axis);
+	m_ModelMatrix = glm::rotate(m_ModelMatrix, angleRadians, axis);
 }
 
 void Transform::ConstructMatrix()
 {
-	transform = glm::translate(glm::mat4_cast(rotation) * glm::scale(glm::mat4(1.0), scale), position);
+	m_ModelMatrix = glm::translate(glm::mat4_cast(m_Rotation) * glm::scale(glm::mat4(1.0), m_Scale), m_Position);
 }

@@ -11,14 +11,6 @@
 #include "Rendering/Mesh.h"
 #include "InputHandler.h"
 
-void printKey(const char* key, InputHandling::InputPressEnum IPE, InputHandling::InputModEnum IME)
-{
-	if (key)
-	{
-		std::cout << "Key: " << key << std::endl;
-	}
-}
-
 int main()
 {
 	GLFWwindow* window;
@@ -105,7 +97,7 @@ int main()
 	float aspectRatio = (float)width / (float)height;
 
 	Camera camera(45.0f, aspectRatio, 0.01f, 100.0f);
-	camera.transform.transform = glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 5.0f)), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	camera.transform.SetPosition(glm::vec3(0.0f, 0.0f, 3.0f));
 
 	glm::vec3 mainLightDir(1.0f, 0.0f, 0.0f);
 

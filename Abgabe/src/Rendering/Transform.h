@@ -4,13 +4,11 @@
 #include "glm/gtc/quaternion.hpp"
 class Transform
 {
-public:
-	glm::mat4x4 transform;
-
 private:
-	glm::vec3 position;
-	glm::quat rotation;
-	glm::vec3 scale;
+	glm::mat4x4 m_ModelMatrix;
+	glm::vec3 m_Position;
+	glm::quat m_Rotation;
+	glm::vec3 m_Scale;
 
 public:
 	Transform();
@@ -23,9 +21,11 @@ public:
 	void SetTransform(const glm::vec3 newPosition, const glm::quat newRotation, const glm::vec3 newScale);
 	void RotateAroundAxis(const glm::vec3& axis, const float& angleRadians);
 
-	glm::vec3 GetPosition() { return position; }
-	glm::quat GetRotation() { return rotation; }
-	glm::vec3 GetScale() { return scale; }
+	glm::mat4x4 GetModelMatrix() { return m_ModelMatrix; }
+
+	glm::vec3 GetPosition() { return m_Position; }
+	glm::quat GetRotation() { return m_Rotation; }
+	glm::vec3 GetScale() { return m_Scale; }
 
 private:
 	void ConstructMatrix();

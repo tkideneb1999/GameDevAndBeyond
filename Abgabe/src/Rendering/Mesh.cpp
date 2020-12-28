@@ -80,8 +80,8 @@ void Mesh::DrawMesh(Camera& camera)
 	shader->EnableShader();
 
 	//Update Matrices
-	m_MVP = camera.Projection() * (camera.ViewMatrix() * transform.transform);
-	m_ITM = glm::transpose(glm::inverse(transform.transform));
+	m_MVP = camera.Projection() * (camera.ViewMatrix() * transform.GetModelMatrix());
+	m_ITM = glm::transpose(glm::inverse(transform.GetModelMatrix()));
 
 	//Set Uniform Matrices
 	shader->SetMatrix4x4("u_MVP", m_MVP);
