@@ -47,12 +47,6 @@ int main()
 	//const int* const var = 1 : cannot modify anything
 	//with methods: int() const : does not modify classes contents
 
-	//ECS Sample Code
-	//Entity entity;
-	//entity.AddComponent<SampleComponent>();
-	//entity.RemoveComponent<SampleComponent>();
-	//entity.SampleComponent.position.x = 0.1f;
-
 	// Make the window's context current
 	glfwMakeContextCurrent(window);
 
@@ -126,9 +120,6 @@ int main()
 		glfwSwapBuffers(window);
 
 		glfwPollEvents();
-
-		//ECS Sample Code
-		//RenderSystem.Render();
 	}
 
 	glfwTerminate();
