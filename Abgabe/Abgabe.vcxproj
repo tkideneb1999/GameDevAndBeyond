@@ -163,9 +163,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Component.cpp" />
-    <ClCompile Include="src\ComponentManager.cpp" />
-    <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\FPSCameraBehaviour.cpp" />
     <ClCompile Include="src\InputHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -174,13 +171,9 @@
     <ClCompile Include="src\Rendering\Shader.cpp" />
     <ClCompile Include="src\Rendering\Transform.cpp" />
     <ClCompile Include="src\RenderSystem.cpp" />
-    <ClCompile Include="src\TypeID.cpp" />
     <ClCompile Include="ThirdParty\glm\detail\glm.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Component.h" />
-    <ClInclude Include="src\ComponentManager.h" />
-    <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\FPSCameraBehaviour.h" />
     <ClInclude Include="src\InputHandler.h" />
     <ClInclude Include="src\json.hpp" />
@@ -191,8 +184,8 @@
     <ClInclude Include="src\Rendering\Shader.h" />
     <ClInclude Include="src\Rendering\Transform.h" />
     <ClInclude Include="src\RenderSystem.h" />
-    <ClInclude Include="src\TypeID.h" />
     <ClInclude Include="src\Rendering\Vertex.h" />
+    <ClInclude Include="ThirdParty\entt\entt.hpp" />
     <ClInclude Include="ThirdParty\glm\common.hpp" />
     <ClInclude Include="ThirdParty\glm\detail\compute_common.hpp" />
     <ClInclude Include="ThirdParty\glm\detail\compute_vector_relational.hpp" />
