@@ -5,11 +5,28 @@
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
+#include "entt/entt.hpp"
 
-#include "Rendering/RenderingUtils.h"
+#include "Rendering/RenderSystem.h"
 #include "Rendering/Camera.h"
 #include "Rendering/Mesh.h"
+#include "Rendering/RenderingUtils.h"
 #include "InputHandler.h"
+
+// int* var : declares pointer -> stores address to variable
+// *var		: dereferences pointer -> can change value
+// int var2 : declares variable on stack
+// &var2	: gets memory address of var2
+// const int* p : reading possible but not modifying
+// int& r : creates reference
+// r->x : (*r).x
+//int* x, y : makes only first variable a pointer, has to be written as: int* x, *y
+
+//const int var = 1 : cannot change var anymore -> makes it read-only
+//const int* var = 1; int const* var = 1 : cannot change content of pointer
+//int* const var = 1 : can change content, but not memory address, important const has to be after *
+//const int* const var = 1 : cannot modify anything
+//with methods: int() const : does not modify classes contents
 
 int main()
 {
@@ -31,21 +48,6 @@ int main()
 		glfwTerminate();
 		return -1;
 	}
-
-	// int* var : declares pointer -> stores address to variable
-	// *var		: dereferences pointer -> can change value
-	// int var2 : declares variable on stack
-	// &var2	: gets memory address of var2
-	// const int* p : reading possible but not modifying
-	// int& r : creates reference
-	// r->x : (*r).x
-	//int* x, y : makes only first variable a pointer, has to be written as: int* x, *y
-
-	//const int var = 1 : cannot change var anymore -> makes it read-only
-	//const int* var = 1; int const* var = 1 : cannot change content of pointer
-	//int* const var = 1 : can change content, but not memory address, important const has to be after *
-	//const int* const var = 1 : cannot modify anything
-	//with methods: int() const : does not modify classes contents
 
 	// Make the window's context current
 	glfwMakeContextCurrent(window);
@@ -76,6 +78,8 @@ int main()
 	//Print Info
 	RenderingUtils::printInfo();
 #endif
+
+	entt::registry registry;
 	
 	//OpenGL Setup
 	glEnable(GL_DEPTH_TEST);
@@ -85,37 +89,33 @@ int main()
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
 
+	RenderSystem renderSystem;
+
 	//Camera Setup
 	int width, height;
 	glfwGetWindowSize(window, &width, &height);
 	float aspectRatio = (float)width / (float)height;
 
-	Camera camera(45.0f, aspectRatio, 0.01f, 100.0f);
-	camera.transform.SetPosition(glm::vec3(0.0f, 0.0f, 3.0f));
+	//Camera Entity
+	entt::entity camera = registry.create();
+	registry.emplace<Transform>(camera, glm::vec3(0.0f, 0.0f, 3.0f), glm::quat(), glm::vec3(1.0f, 1.0f, 1.0f));
+	registry.emplace<Camera>(camera, 45.0f, aspectRatio, 0.01f, 100.0f);
+
+	//Mesh Entity
+	entt::entity suzanne = registry.create();
+	registry.emplace<Transform>(suzanne);
+	auto& suzanneMesh = registry.emplace<Mesh>(suzanne, "../resources/suzanne.obj");
+	suzanneMesh.SetShader("../Abgabe/resources/Shaders/LambertVert.shader", "../Abgabe/resources/Shaders/LambertFrag.shader");
+
 
 	glm::vec3 mainLightDir(1.0f, 0.0f, 0.0f);
-
-	//Meshes
-	Mesh plane("../resources/plane.obj");
-	plane.transform.SetPosition(glm::vec3(0.0f, -2.0f, 0.0f));
-	plane.transform.SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
-	plane.SetShader("../Abgabe/resources/Shaders/ColorVert.shader", "../Abgabe/resources/Shaders/ColorFrag.shader");
-
-	Mesh suzanne("../resources/suzanne.obj");
-	suzanne.SetShader("../Abgabe/resources/Shaders/LambertVert.shader", "../Abgabe/resources/Shaders/LambertFrag.shader");
-	suzanne.shader->SetUniform3f("u_LightDir", mainLightDir);
-	suzanne.shader->SetUniform4f("u_Color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	//Render Loop
 	while (!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		plane.shader->SetUniform4f("u_Color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-		plane.DrawMesh(camera);
-
-		suzanne.transform.RotateAroundAxis(glm::vec3(0.0f, 1.0f, 0.0f), glm::radians(1.0f));
-		suzanne.DrawMesh(camera);
+		renderSystem.Render(registry);
 
 		glfwSwapBuffers(window);
 

@@ -12,6 +12,7 @@ private:
 
 public:
 	Transform();
+	Transform(const Transform& transform) = default;
 	Transform(const glm::vec3 initPosition, const glm::quat initRotation, const glm::vec3 initScale);
 
 	void SetPosition(const glm::vec3 newPosition);

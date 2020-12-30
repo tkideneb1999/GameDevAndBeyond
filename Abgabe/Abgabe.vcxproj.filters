@@ -18,9 +18,6 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="src\RenderSystem.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="ThirdParty\glm\detail\glm.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
@@ -42,12 +39,12 @@
     <ClCompile Include="src\FPSCameraBehaviour.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\RenderSystem.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\json.hpp">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="src\RenderSystem.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\Vertex.h">
@@ -924,6 +921,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="ThirdParty\entt\entt.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\RenderSystem.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

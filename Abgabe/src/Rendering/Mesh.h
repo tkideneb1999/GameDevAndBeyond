@@ -24,7 +24,6 @@ private:
 	GLuint m_IBOHandle;
 
 public:
-	Transform transform;
 	Shader* shader;
 
 private:
@@ -32,9 +31,15 @@ private:
 public:
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
 	Mesh(const char* modelPath);
+	Mesh();
 	~Mesh();
+	Mesh(const Mesh&) = default;
 
 	void SetShader(const char* vertShaderPath, const char* fragShaderPath);
-	
-	void DrawMesh(Camera& camera);
+
+	unsigned int getIndicesCount() { return m_indices.size(); }
+
+	GLuint getVAOHandle() { return m_VAOHandle; }
+	GLuint getVBOHandle() { return m_VBOHandle; }
+	GLuint getIBOHandle() { return m_IBOHandle; }
 };

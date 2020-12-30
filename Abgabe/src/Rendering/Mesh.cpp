@@ -3,7 +3,7 @@
 #include "../objSerialization/WavefrontSerialization.h"
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
-	:shader(new Shader()), transform()
+	:shader(new Shader())
 {
 	m_vertices = vertices;
 	m_indices = indices;
@@ -11,11 +11,20 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
 }
 
 Mesh::Mesh(const char* modelPath)
-	:shader(new Shader()), transform()
+	:shader(new Shader())
 {
 	std::cout << "----------------------" << std::endl;
 	std::cout << "Loading Model" << std::endl;
 	WavefrontSerialization::LoadWavefront(modelPath, m_vertices, m_indices);
+	GenerateBuffers();
+}
+
+Mesh::Mesh()
+	:shader(new Shader())
+{
+	std::cout << "----------------------" << std::endl;
+	std::cout << "Loading Model" << std::endl;
+	WavefrontSerialization::LoadWavefront("../resources/plane.obj", m_vertices, m_indices);
 	GenerateBuffers();
 }
 
@@ -70,24 +79,4 @@ inline void Mesh::GenerateBuffers()
 
 	//Unbind VAO
 	glBindVertexArray(0);
-}
-
-void Mesh::DrawMesh(Camera& camera)
-{
-	glBindVertexArray(m_VAOHandle);
-	glBindBuffer(GL_ARRAY_BUFFER, m_VBOHandle);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOHandle);
-	shader->EnableShader();
-
-	//Update Matrices
-	m_MVP = camera.Projection() * (camera.ViewMatrix() * transform.GetModelMatrix());
-	m_ITM = glm::transpose(glm::inverse(transform.GetModelMatrix()));
-
-	//Set Uniform Matrices
-	shader->SetMatrix4x4("u_MVP", m_MVP);
-	shader->SetMatrix4x4("u_ITM", m_ITM);
-
-	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
-
-	shader->DisableShader();
 }
