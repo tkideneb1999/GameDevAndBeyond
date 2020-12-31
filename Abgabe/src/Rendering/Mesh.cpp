@@ -2,9 +2,13 @@
 
 #include "../objSerialization/WavefrontSerialization.h"
 
+#define DEBUGBREAKLINE std::cout << "----------------------" << std::endl
+
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
 	:shader(new Shader())
 {
+	DEBUGBREAKLINE;
+	std::cout << "Creating Mesh from existing Data" << std::endl;
 	m_vertices = vertices;
 	m_indices = indices;
 	GenerateBuffers();
@@ -13,8 +17,9 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
 Mesh::Mesh(const char* modelPath)
 	:shader(new Shader())
 {
-	std::cout << "----------------------" << std::endl;
-	std::cout << "Loading Model" << std::endl;
+	DEBUGBREAKLINE;
+	std::cout << "Loading Model from:" << std::endl;
+	std::cout << modelPath << std::endl;
 	WavefrontSerialization::LoadWavefront(modelPath, m_vertices, m_indices);
 	GenerateBuffers();
 }
@@ -22,15 +27,25 @@ Mesh::Mesh(const char* modelPath)
 Mesh::Mesh()
 	:shader(new Shader())
 {
-	std::cout << "----------------------" << std::endl;
-	std::cout << "Loading Model" << std::endl;
+	DEBUGBREAKLINE;
+	std::cout << "Loading Model from:" << std::endl;
+	std::cout << "../resources/plane.obj" << std::endl;
 	WavefrontSerialization::LoadWavefront("../resources/plane.obj", m_vertices, m_indices);
+	GenerateBuffers();
+}
+
+Mesh::Mesh(const Mesh& mesh)
+	:shader(new Shader(mesh.shader->GetVertShaderLocation(), mesh.shader->GetFragShaderLocation())),
+	m_vertices(mesh.m_vertices), m_indices(mesh.m_indices)
+{
+	DEBUGBREAKLINE;
+	std::cout << "Copying Mesh Data" << std::endl;
 	GenerateBuffers();
 }
 
 Mesh::~Mesh()
 {
-	std::cout << "----------------------" << std::endl;
+	DEBUGBREAKLINE;
 	std::cout << "Deleting Mesh" << std::endl;
 	//Disable Generic Vertex Attributes
 	glDisableVertexAttribArray(0);

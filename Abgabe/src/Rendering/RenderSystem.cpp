@@ -32,18 +32,19 @@ void RenderSystem::Render(entt::registry& registry)
 	
 	for (auto cameraEntity : cameraView)
 	{
-		//Camera& camera = cameraView.get<Camera>(cameraEntity);
-		//Transform& cameraTransform = cameraView.get<Transform>(cameraEntity);
+		Camera& camera = cameraView.get<Camera>(cameraEntity);
+		Transform& cameraTransform = cameraView.get<Transform>(cameraEntity);
 		
-		//glm::mat4 viewMatrix = camera.ViewMatrix(cameraTransform);
-		//
-		//auto meshView = registry.view<Mesh, Transform>();
-		//
-		//for (auto meshEntity : meshView)
-		//{
-		//	Mesh& mesh = meshView.get<Mesh>(meshEntity);
-		//	Transform& meshTransform = meshView.get<Transform>(meshEntity);
-		//	RenderSingle(camera, meshTransform, mesh);
-		//}
+		auto meshView = registry.view<Mesh, Transform>();
+		
+		for (auto meshEntity : meshView)
+		{
+			Mesh& mesh = meshView.get<Mesh>(meshEntity);
+			Transform& meshTransform = meshView.get<Transform>(meshEntity);
+			RenderSingle(camera, meshTransform, mesh);
+			glm::vec4 color;
+			mesh.shader->GetUniform4f("u_Color", color);
+			std::cout << "Color: " << color.x << ", " << color.y << ", " << color.z << ", " << color.w << std::endl;
+		}
 	}
 }

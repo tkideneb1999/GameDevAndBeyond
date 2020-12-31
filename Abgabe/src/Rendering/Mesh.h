@@ -16,9 +16,6 @@ private:
 	std::vector<Vertex> m_vertices;
 	std::vector<unsigned int> m_indices;
 
-	glm::mat4x4 m_MVP;
-	glm::mat4x4 m_ITM;
-
 	GLuint m_VAOHandle;
 	GLuint m_VBOHandle;
 	GLuint m_IBOHandle;
@@ -33,7 +30,7 @@ public:
 	Mesh(const char* modelPath);
 	Mesh();
 	~Mesh();
-	Mesh(const Mesh&) = default;
+	Mesh(const Mesh&);
 
 	void SetShader(const char* vertShaderPath, const char* fragShaderPath);
 
