@@ -180,7 +180,6 @@ void Shader::CheckShaderCompilationResult(GLuint shaderObject)
 		std::cerr << info << std::endl;
 	}
 }
-
 void Shader::CheckShaderLinkingResult(GLuint shaderProgram)
 {
 	GLint success;
@@ -194,6 +193,7 @@ void Shader::CheckShaderLinkingResult(GLuint shaderProgram)
 	}
 }
 
+//Cache Uniforms
 GLuint Shader::CacheUniformLocation(const char* name)
 {
 	auto it = m_UniformMap.find(name);
@@ -206,6 +206,7 @@ GLuint Shader::CacheUniformLocation(const char* name)
 	return m_UniformMap[name];
 }
 
+//Get Uniforms
 bool Shader::GetUniformLocation(const char* name, GLint* pLocation)
 {
 	auto it = m_UniformMap.find(name);
@@ -220,39 +221,35 @@ bool Shader::GetUniformLocation(const char* name, GLint* pLocation)
 	}
 }
 
+//Set Uniforms
 void Shader::SetUniform1f(const char* name, float value)
 {
 	glUseProgram(m_ShaderProgram);
 	glUniform1f(CacheUniformLocation(name), value);
 	glUseProgram(0);
 }
-
 void Shader::SetUniform2f(const char* name, glm::vec2 value)
 {
 	glUseProgram(m_ShaderProgram);
 	glUniform2f(CacheUniformLocation(name), value.x, value.y);
 	glUseProgram(0);
 }
-
 void Shader::SetUniform3f(const char* name, glm::vec3 value)
 {
 	glUseProgram(m_ShaderProgram);
 	glUniform3f(CacheUniformLocation(name), value.x, value.y, value.z);
 	glUseProgram(0);
 }
-
 void Shader::SetUniform4f(const char* name, glm::vec4 value)
 {
 	glUseProgram(m_ShaderProgram);
 	glUniform4f(CacheUniformLocation(name), value.x, value.y, value.z, value.w);
 	glUseProgram(0);
 }
-
 void Shader::SetMatrix4x4(const char* name, glm::mat4x4 value)
 {
 	glUniformMatrix4fv(CacheUniformLocation(name), 1, GL_FALSE, &value[0][0]);
 }
-
 void Shader::GetUniform4f(const char* name, glm::vec4& value)
 {
 	GLint uniformLocation;

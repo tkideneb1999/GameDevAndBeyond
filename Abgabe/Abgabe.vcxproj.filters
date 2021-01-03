@@ -42,6 +42,9 @@
     <ClCompile Include="src\Rendering\RenderSystem.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Material.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\json.hpp">
@@ -924,6 +927,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\RenderSystem.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Material.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
