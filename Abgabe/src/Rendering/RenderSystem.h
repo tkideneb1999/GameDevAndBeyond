@@ -9,6 +9,6 @@
 class RenderSystem
 {
 public:
-	void RenderSingle(Camera& camera, Transform& transform, Mesh& mesh);
+	void RenderSingle(Camera& camera, Transform& camtransform, Mesh& mesh, Transform& meshTransform);
 	void Render(entt::registry& registry);
 };

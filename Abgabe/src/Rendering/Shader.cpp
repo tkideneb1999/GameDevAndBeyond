@@ -1,53 +1,21 @@
 #include "Shader.h"
 
-Shader::Shader(const char* vertShaderPath, const char* fragShaderPath)
-	:m_VertShaderLocation(vertShaderPath), m_FragShaderLocation(fragShaderPath)
+#include <sstream>
+
+Shader::Shader(const char* filePath)
+	:m_ShaderLocation(filePath)
 {
 	std::cout << "----------------------" << std::endl;
 	std::cout << "Creating Shader" << std::endl;
-	m_ShaderProgram = glCreateProgram();
-
-	GLuint vertShader = CreateShader(vertShaderPath, GL_VERTEX_SHADER);
-	GLuint fragShader = CreateShader(fragShaderPath, GL_FRAGMENT_SHADER);
-
-	glAttachShader(m_ShaderProgram, vertShader);
-	glAttachShader(m_ShaderProgram, fragShader);
-
-	glLinkProgram(m_ShaderProgram);
-#ifdef _DEBUG
-	CheckShaderLinkingResult(m_ShaderProgram);
-#endif
-
-	glDetachShader(m_ShaderProgram, vertShader);
-	glDeleteShader(vertShader);
-
-	glDetachShader(m_ShaderProgram, fragShader);
-	glDeleteShader(fragShader);
+	CreateShaderProgram(m_ShaderLocation);
 }
 
 Shader::Shader()
-	:m_VertShaderLocation("../Abgabe/resources/Shaders/DefaultVert.shader"), m_FragShaderLocation("../Abgabe/resources/Shaders/DefaultFrag.shader")
+	:m_ShaderLocation("../Abgabe/resources/Shaders/Default.shader")
 {
 	std::cout << "----------------------" << std::endl;
 	std::cout << "Creating Shader" << std::endl;
-	m_ShaderProgram = glCreateProgram();
-
-	GLuint vertShader = CreateShader("../Abgabe/resources/Shaders/DefaultVert.shader", GL_VERTEX_SHADER);
-	GLuint fragShader = CreateShader("../Abgabe/resources/Shaders/DefaultFrag.shader", GL_FRAGMENT_SHADER);
-
-	glAttachShader(m_ShaderProgram, vertShader);
-	glAttachShader(m_ShaderProgram, fragShader);
-
-	glLinkProgram(m_ShaderProgram);
-#ifdef _DEBUG
-	CheckShaderLinkingResult(m_ShaderProgram);
-#endif
-
-	glDetachShader(m_ShaderProgram, vertShader);
-	glDeleteShader(vertShader);
-
-	glDetachShader(m_ShaderProgram, fragShader);
-	glDeleteShader(fragShader);
+	CreateShaderProgram(m_ShaderLocation);
 }
 
 Shader::~Shader()
@@ -58,28 +26,11 @@ Shader::~Shader()
 }
 
 Shader::Shader(const Shader& shader)
-	:m_VertShaderLocation(shader.m_VertShaderLocation), m_FragShaderLocation(shader.m_FragShaderLocation), m_UniformMap(shader.m_UniformMap)
+	:m_ShaderLocation(shader.m_ShaderLocation), m_UniformMap(shader.m_UniformMap)
 {
 	std::cout << "----------------------" << std::endl;
 	std::cout << "Copying Shader" << std::endl;
-	m_ShaderProgram = glCreateProgram();
-
-	GLuint vertShader = CreateShader(m_VertShaderLocation, GL_VERTEX_SHADER);
-	GLuint fragShader = CreateShader(m_FragShaderLocation, GL_FRAGMENT_SHADER);
-
-	glAttachShader(m_ShaderProgram, vertShader);
-	glAttachShader(m_ShaderProgram, fragShader);
-
-	glLinkProgram(m_ShaderProgram);
-#ifdef _DEBUG
-	CheckShaderLinkingResult(m_ShaderProgram);
-#endif
-
-	glDetachShader(m_ShaderProgram, vertShader);
-	glDeleteShader(vertShader);
-
-	glDetachShader(m_ShaderProgram, fragShader);
-	glDeleteShader(fragShader);
+	CreateShaderProgram(m_ShaderLocation);
 }
 
 void Shader::EnableShader()
@@ -95,7 +46,7 @@ void Shader::DisableShader()
 	glUseProgram(0);
 }
 
-const GLchar* Shader::LoadSource(const char* filePath)
+void Shader::LoadSource(const char* filePath, std::string& outVertSource, std::string& outFragSource)
 {
 	std::ifstream fileStream(filePath);
 
@@ -103,21 +54,120 @@ const GLchar* Shader::LoadSource(const char* filePath)
 	{
 		std::cerr << "Error opening Shader file at: " << filePath << std::endl;
 	}
-
+	
+	bool isVertSource = false;
 	std::string fileContent;
 	std::string tempString;
+	std::getline(fileStream, tempString, '\n');
+
+	std::istringstream nameStream(tempString);
+	nameStream >> tempString;
+	if (tempString == "name" || tempString == "Name")
+	{
+		nameStream >> m_Name;
+	}
+
 	while (std::getline(fileStream, tempString, '\n'))
 	{
-		fileContent += tempString;
+		if (tempString == "#vert")
+		{
+			isVertSource = true;
+			continue;
+		}
+		else if (tempString == "#frag")
+		{
+			isVertSource = false;
+			continue;
+		}
+
+		if (isVertSource)
+		{
+			outVertSource += tempString;
+			outVertSource += '\n';
+		}
+		else
+		{
+			outFragSource += tempString;
+			outFragSource += '\n';
+		}
+
+
+
 		fileContent += '\n';
 	}
-	GLchar* source = new GLchar[fileContent.length() + 1];
-	fileContent.copy(source, fileContent.length());
-	source[fileContent.length()] = '\0';
-
-	return source;
 }
 
+GLuint Shader::CreateShader(const GLchar* source, GLenum shaderType)
+{
+
+	GLuint shaderHandle = glCreateShader(shaderType);
+	
+	GLint sourceLength = strlen(source);
+
+#ifdef _DEBUG
+	switch (shaderType)
+	{
+	case GL_VERTEX_SHADER:
+		std::cout << "Compiling Vertex Shader from: " << m_ShaderLocation << std::endl;
+		break;
+	case GL_FRAGMENT_SHADER:
+		std::cout << "Compiling Fragment Shader from: " << m_ShaderLocation << std::endl;
+		break;
+	}
+		//std::cout << "Source:" << std::endl;
+		//std::cout << source << std::endl;
+		//std::cout << "---" << std::endl;
+#endif
+
+	glShaderSource(shaderHandle, 1, &source, &sourceLength);
+	glCompileShader(shaderHandle);
+	delete[] source;
+#ifdef _DEBUG
+	CheckShaderCompilationResult(shaderHandle);
+#endif
+
+	return shaderHandle;
+}
+
+GLchar* Shader::CopyToGLchar(std::string& source)
+{
+	GLchar* fragSource = new GLchar[source.length() + 1];
+	source.copy(fragSource, source.length());
+	fragSource[source.length()] = '\0';
+	return fragSource;
+}
+
+void Shader::CreateShaderProgram(const char* filePath)
+{
+	m_ShaderProgram = glCreateProgram();
+
+	std::string vertSourceStdString;
+	std::string fragSourceStdString;
+
+	LoadSource(filePath, vertSourceStdString, fragSourceStdString);
+
+	const GLchar* vertSource = CopyToGLchar(vertSourceStdString);
+	const GLchar* fragSource = CopyToGLchar(fragSourceStdString);
+
+	GLuint vertShader = CreateShader(vertSource, GL_VERTEX_SHADER);
+	GLuint fragShader = CreateShader(fragSource, GL_FRAGMENT_SHADER);
+
+	glAttachShader(m_ShaderProgram, vertShader);
+	glAttachShader(m_ShaderProgram, fragShader);
+
+	glLinkProgram(m_ShaderProgram);
+#ifdef _DEBUG
+	CheckShaderLinkingResult(m_ShaderProgram);
+#endif
+
+	glDetachShader(m_ShaderProgram, vertShader);
+	glDeleteShader(vertShader);
+
+	glDetachShader(m_ShaderProgram, fragShader);
+	glDeleteShader(fragShader);
+}
+
+//Debugging Helpers
 void Shader::CheckShaderCompilationResult(GLuint shaderObject)
 {
 	GLint success;
@@ -142,27 +192,6 @@ void Shader::CheckShaderLinkingResult(GLuint shaderProgram)
 		std::cerr << "Error Linking Shader Program: " << std::endl;
 		std::cerr << errorMsg << std::endl;
 	}
-}
-
-GLuint Shader::CreateShader(const char* sourcePath, GLenum type)
-{
-	GLuint shaderHandle = glCreateShader(type);
-
-	const GLchar* source = LoadSource(sourcePath);
-	GLint sourceLength = strlen(source);
-
-#ifdef _DEBUG
-	std::cout << "Compiling Shader from: " << sourcePath << std::endl;
-#endif
-
-	glShaderSource(shaderHandle, 1, &source, &sourceLength);
-	glCompileShader(shaderHandle);
-	delete[] source;
-#ifdef _DEBUG
-	CheckShaderCompilationResult(shaderHandle);
-#endif
-
-	return shaderHandle;
 }
 
 GLuint Shader::CacheUniformLocation(const char* name)

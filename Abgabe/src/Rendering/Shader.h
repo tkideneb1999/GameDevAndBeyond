@@ -13,7 +13,7 @@
 class Shader
 {
 public:
-	Shader(const char* vertShaderPath, const char* fragShaderPath);
+	Shader(const char* filePath);
 	Shader();
 	~Shader();
 	Shader(const Shader& shader);
@@ -22,26 +22,31 @@ public:
 	void DisableShader();
 
 private:
-	const char* m_VertShaderLocation;
-	const char* m_FragShaderLocation;
+	std::string m_Name;
+
+	const char* m_ShaderLocation;
 
 	GLuint m_ShaderProgram;
 	std::unordered_map<const char*, GLint> m_UniformMap;
 
-	const GLchar* LoadSource(const char* filePath);
+	void LoadSource(const char* filePath, std::string& outVertSource, std::string& outFragSource);
+
+	GLchar* CopyToGLchar(std::string& source);
 
 	void CheckShaderCompilationResult(GLuint ShaderObj);
 
 	void CheckShaderLinkingResult(GLuint ShaderProgram);
 
-	GLuint CreateShader(const char* sourcePath, GLenum type);
+	GLuint CreateShader(const GLchar* source, GLenum shaderType);
+
+	void CreateShaderProgram(const char* filePath);
 
 	GLuint CacheUniformLocation(const char* name);
 	bool GetUniformLocation(const char* name, GLint* pLocation);
 
 public:
-	const char* GetVertShaderLocation() { return m_VertShaderLocation; }
-	const char* GetFragShaderLocation() { return m_FragShaderLocation; }
+	const char* GetShaderLocation() { return m_ShaderLocation; }
+
 	void SetUniform1f(const char* name, float value);
 	void SetUniform2f(const char* name, glm::vec2 value);
 	void SetUniform3f(const char* name, glm::vec3 value);

@@ -32,7 +32,7 @@ public:
 	~Mesh();
 	Mesh(const Mesh&);
 
-	void SetShader(const char* vertShaderPath, const char* fragShaderPath);
+	void SetShader(const char* shaderPath);
 
 	unsigned int getIndicesCount() { return m_indices.size(); }
 

@@ -35,7 +35,7 @@ Mesh::Mesh()
 }
 
 Mesh::Mesh(const Mesh& mesh)
-	:shader(new Shader(mesh.shader->GetVertShaderLocation(), mesh.shader->GetFragShaderLocation())),
+	:shader(new Shader(mesh.shader->GetShaderLocation())),
 	m_vertices(mesh.m_vertices), m_indices(mesh.m_indices)
 {
 	DEBUGBREAKLINE;
@@ -62,10 +62,10 @@ Mesh::~Mesh()
 	delete shader;
 }
 
-void Mesh::SetShader(const char* vertShaderPath, const char* fragShaderPath)
+void Mesh::SetShader(const char* shaderPath)
 {
 	delete shader;
-	shader = new Shader(vertShaderPath, fragShaderPath);
+	shader = new Shader(shaderPath);
 }
 
 inline void Mesh::GenerateBuffers()
@@ -94,4 +94,7 @@ inline void Mesh::GenerateBuffers()
 
 	//Unbind VAO
 	glBindVertexArray(0);
+
+	//Unbind Index Buffer
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

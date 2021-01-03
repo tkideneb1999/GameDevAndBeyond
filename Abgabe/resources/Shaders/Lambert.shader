@@ -1,3 +1,5 @@
+name Lambert
+#vert
 #version 460
 
 layout(location = 0) in vec3 vPosition;
@@ -14,4 +16,20 @@ void main()
 {
 	gl_Position = u_MVP * vec4(vPosition, 1.0);
 	fNormal = (u_ITM * vec4(vNormal, 1.0)).xyz;
+}
+
+#frag
+#version 460
+
+in vec3 fNormal;
+
+out vec4 finalColor;
+
+uniform vec3 u_LightDir;
+uniform vec4 u_Color;
+
+void main()
+{
+	float lambert = dot(fNormal, u_LightDir);
+	finalColor = u_Color * lambert;
 }

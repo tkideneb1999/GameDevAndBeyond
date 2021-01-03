@@ -100,8 +100,8 @@ int main()
 
 	//Camera Entity
 	entt::entity camera = registry.create();
-	registry.emplace<Transform>(camera, glm::vec3(0.0f, 0.0f, 3.0f), glm::quat(), glm::vec3(1.0f, 1.0f, 1.0f));
-	registry.emplace<Camera>(camera, 45.0f, aspectRatio, 0.01f, 100.0f);
+	auto& camTransform = registry.emplace<Transform>(camera, glm::vec3(0.0f, 0.0f, 3.0f), glm::quat(), glm::vec3(1.0f, 1.0f, 1.0f));
+	auto& camComponent = registry.emplace<Camera>(camera, 45.0f, aspectRatio, 0.01f, 100.0f);
 
 	//Mesh Entities
 	std::cout << "-------------" << std::endl;
@@ -109,24 +109,23 @@ int main()
 	entt::entity suzanne = registry.create();
 	registry.emplace<Transform>(suzanne);
 	auto& suzanneMesh = registry.emplace<Mesh>(suzanne, "../resources/suzanne.obj");
-	suzanneMesh.SetShader("../Abgabe/resources/Shaders/LambertVert.shader", "../Abgabe/resources/Shaders/LambertFrag.shader");
+	suzanneMesh.SetShader("../Abgabe/resources/Shaders/Lambert.shader");
 	suzanneMesh.shader->SetUniform3f("u_LightDir", mainLightDir);
 	suzanneMesh.shader->SetUniform4f("u_Color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
+	
 	std::cout << "-------------" << std::endl;
 	std::cout << "Creating Entity Plane" << std::endl;
 	entt::entity plane = registry.create();
 	auto& planeTransform = registry.emplace<Transform>(plane);
 	planeTransform.SetPosition(glm::vec3(0.0f, -2.0f, 0.0f));
 	auto& planeMesh = registry.emplace<Mesh>(plane, "../resources/plane.obj");
-	planeMesh.SetShader("../Abgabe/resources/Shaders/ColorVert.shader", "../Abgabe/resources/Shaders/ColorFrag.shader");
+	planeMesh.SetShader("../Abgabe/resources/Shaders/Default.shader");
 	planeMesh.shader->SetUniform4f("u_Color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
 	//Render Loop
 	while (!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		renderSystem.Render(registry);
 
 		glfwSwapBuffers(window);
