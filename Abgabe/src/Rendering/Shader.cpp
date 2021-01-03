@@ -22,7 +22,7 @@ Shader::~Shader()
 {
 	std::cout << "----------------------" << std::endl;
 	std::cout << "Deleting Shader" << std::endl;
-	glDeleteProgram(m_ShaderProgram);
+	glDeleteProgram(m_ShaderProgramHandle);
 }
 
 Shader::Shader(const Shader& shader)
@@ -36,9 +36,9 @@ Shader::Shader(const Shader& shader)
 void Shader::EnableShader()
 {
 #ifdef _DEBUG
-	glValidateProgram(m_ShaderProgram);
+	glValidateProgram(m_ShaderProgramHandle);
 #endif
-	glUseProgram(m_ShaderProgram);
+	glUseProgram(m_ShaderProgramHandle);
 }
 
 void Shader::DisableShader()
@@ -91,9 +91,35 @@ void Shader::LoadSource(const char* filePath, std::string& outVertSource, std::s
 			outFragSource += '\n';
 		}
 
-
-
 		fileContent += '\n';
+
+
+	}
+}
+
+void Shader::CacheAllUniforms()
+{
+	//Get amount of used Uniforms in Shader
+	GLint numActiveUniforms;
+	glGetProgramiv(m_ShaderProgramHandle, GL_ACTIVE_UNIFORMS, &numActiveUniforms);
+	if (numActiveUniforms == 0) return;
+
+	//Get Length of longest Uniform Variable
+	GLint uniformsMaxLength;
+	glGetProgramiv(m_ShaderProgramHandle, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformsMaxLength);
+	
+	//Get individual Uniforms & Cache them
+	GLenum type;
+	GLint size = 0;
+	std::vector<GLchar> nameData(uniformsMaxLength);
+	GLsizei length;
+
+	for (int i = 0; i < numActiveUniforms; i++)
+	{
+		glGetActiveUniform(m_ShaderProgramHandle, i, uniformsMaxLength, &length, &size, &type, &nameData[0]);
+		std::string name((char*)&nameData[0]);
+		CacheUniformLocation(name.c_str());
+		m_UniformTypeMap.insert(std::make_pair(name.c_str(), type));
 	}
 }
 
@@ -139,7 +165,7 @@ GLchar* Shader::CopyToGLchar(std::string& source)
 
 void Shader::CreateShaderProgram(const char* filePath)
 {
-	m_ShaderProgram = glCreateProgram();
+	m_ShaderProgramHandle = glCreateProgram();
 
 	std::string vertSourceStdString;
 	std::string fragSourceStdString;
@@ -152,18 +178,18 @@ void Shader::CreateShaderProgram(const char* filePath)
 	GLuint vertShader = CreateShader(vertSource, GL_VERTEX_SHADER);
 	GLuint fragShader = CreateShader(fragSource, GL_FRAGMENT_SHADER);
 
-	glAttachShader(m_ShaderProgram, vertShader);
-	glAttachShader(m_ShaderProgram, fragShader);
+	glAttachShader(m_ShaderProgramHandle, vertShader);
+	glAttachShader(m_ShaderProgramHandle, fragShader);
 
-	glLinkProgram(m_ShaderProgram);
+	glLinkProgram(m_ShaderProgramHandle);
 #ifdef _DEBUG
-	CheckShaderLinkingResult(m_ShaderProgram);
+	CheckShaderLinkingResult(m_ShaderProgramHandle);
 #endif
 
-	glDetachShader(m_ShaderProgram, vertShader);
+	glDetachShader(m_ShaderProgramHandle, vertShader);
 	glDeleteShader(vertShader);
 
-	glDetachShader(m_ShaderProgram, fragShader);
+	glDetachShader(m_ShaderProgramHandle, fragShader);
 	glDeleteShader(fragShader);
 }
 
@@ -199,7 +225,7 @@ GLuint Shader::CacheUniformLocation(const char* name)
 	auto it = m_UniformMap.find(name);
 	if (it == m_UniformMap.end())
 	{
-		GLint uniformLocation = glGetUniformLocation(m_ShaderProgram, name);
+		GLint uniformLocation = glGetUniformLocation(m_ShaderProgramHandle, name);
 		m_UniformMap.insert(std::make_pair(name, uniformLocation));
 	}
 
@@ -207,6 +233,15 @@ GLuint Shader::CacheUniformLocation(const char* name)
 }
 
 //Get Uniforms
+void Shader::GetUniform4f(const char* name, glm::vec4& value)
+{
+	GLint uniformLocation;
+	if (!GetUniformLocation(name, &uniformLocation))
+		return;
+
+	glGetUniformfv(m_ShaderProgramHandle, uniformLocation, (GLfloat*)&value.x);
+}
+
 bool Shader::GetUniformLocation(const char* name, GLint* pLocation)
 {
 	auto it = m_UniformMap.find(name);
@@ -224,37 +259,29 @@ bool Shader::GetUniformLocation(const char* name, GLint* pLocation)
 //Set Uniforms
 void Shader::SetUniform1f(const char* name, float value)
 {
-	glUseProgram(m_ShaderProgram);
+	glUseProgram(m_ShaderProgramHandle);
 	glUniform1f(CacheUniformLocation(name), value);
 	glUseProgram(0);
 }
 void Shader::SetUniform2f(const char* name, glm::vec2 value)
 {
-	glUseProgram(m_ShaderProgram);
+	glUseProgram(m_ShaderProgramHandle);
 	glUniform2f(CacheUniformLocation(name), value.x, value.y);
 	glUseProgram(0);
 }
 void Shader::SetUniform3f(const char* name, glm::vec3 value)
 {
-	glUseProgram(m_ShaderProgram);
+	glUseProgram(m_ShaderProgramHandle);
 	glUniform3f(CacheUniformLocation(name), value.x, value.y, value.z);
 	glUseProgram(0);
 }
 void Shader::SetUniform4f(const char* name, glm::vec4 value)
 {
-	glUseProgram(m_ShaderProgram);
+	glUseProgram(m_ShaderProgramHandle);
 	glUniform4f(CacheUniformLocation(name), value.x, value.y, value.z, value.w);
 	glUseProgram(0);
 }
 void Shader::SetMatrix4x4(const char* name, glm::mat4x4 value)
 {
 	glUniformMatrix4fv(CacheUniformLocation(name), 1, GL_FALSE, &value[0][0]);
-}
-void Shader::GetUniform4f(const char* name, glm::vec4& value)
-{
-	GLint uniformLocation;
-	if (!GetUniformLocation(name, &uniformLocation))
-		return;
-
-	glGetUniformfv(m_ShaderProgram, uniformLocation, (GLfloat*)&value.x);
 }

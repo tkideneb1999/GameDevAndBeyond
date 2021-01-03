@@ -21,15 +21,21 @@ public:
 	void EnableShader();
 	void DisableShader();
 
+	std::unordered_map<const char*, GLenum>& GetUniformTypeMap(){ return m_UniformTypeMap; }
+
 private:
 	std::string m_Name;
 
 	const char* m_ShaderLocation;
 
-	GLuint m_ShaderProgram;
+	GLuint m_ShaderProgramHandle;
+
 	std::unordered_map<const char*, GLint> m_UniformMap;
+	std::unordered_map<const char*, GLenum> m_UniformTypeMap;
 
 	void LoadSource(const char* filePath, std::string& outVertSource, std::string& outFragSource);
+
+	void CacheAllUniforms();
 
 	GLchar* CopyToGLchar(std::string& source);
 
