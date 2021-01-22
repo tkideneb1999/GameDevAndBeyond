@@ -12,13 +12,14 @@ class Material
 {
 private:
 	std::string m_Name;
+	std::string m_Location;
 	Shader* m_pShader;
-	std::unordered_map<const char*, int> m_IParameters;
-	std::unordered_map<const char*, float> m_FParameters;
-	std::unordered_map<const char*, glm::vec2> m_V2Parameters;
-	std::unordered_map<const char*, glm::vec3> m_V3Parameters;
-	std::unordered_map<const char*, glm::vec4> m_V4Parameters;
-	std::unordered_map<const char*, glm::mat4> m_M4Parameters;
+	std::unordered_map<std::string, int> m_iUniforms;
+	std::unordered_map<std::string, float> m_fUniforms;
+	std::unordered_map<std::string, glm::vec2> m_v2Uniforms;
+	std::unordered_map<std::string, glm::vec3> m_v3Uniforms;
+	std::unordered_map<std::string, glm::vec4> m_v4Uniforms;
+	std::unordered_map<std::string, glm::mat4> m_m4Uniforms;
 
 public:
 	Material();
@@ -26,6 +27,17 @@ public:
 	~Material();
 	Material(const Material& mat);
 
-	void SetShader(const char* shaderName);
+	void SerializeMaterial(const char* filePath);
+
+	void SetShader(std::string shaderName);
 	Shader* GetShader() { return m_pShader; }
+
+	void SetUniform(const char* name, float value);
+	void SetUniform(const char* name, glm::vec2 value);
+	void SetUniform(const char* name, glm::vec3 value);
+	void SetUniform(const char* name, glm::vec4 value);
+	void SetUniform(const char* name, glm::mat4x4 value);
+
+private:
+	void GetUniformsFromShader();
 };

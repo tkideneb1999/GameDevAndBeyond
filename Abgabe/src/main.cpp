@@ -12,6 +12,9 @@
 #include "Rendering/Mesh.h"
 #include "Rendering/RenderingUtils.h"
 #include "InputHandler.h"
+#include "Serialization/MaterialArchive.h"
+#include "Rendering/Material.h"
+#include "Rendering/ShaderManager.h"
 
 // int* var : declares pointer -> stores address to variable
 // *var		: dereferences pointer -> can change value
@@ -32,7 +35,7 @@ int main()
 {
 	GLFWwindow* window;
 
-	//Initialize Library
+	//Initialize GLFW Library
 	if (!glfwInit())
 		return -1;
 
@@ -78,7 +81,16 @@ int main()
 	//Print Info
 	RenderingUtils::printInfo();
 #endif
+	
+	//Materials
+	ShaderManager& shaderManager = ShaderManager::Get();
+	shaderManager.RegisterShader("../Abgabe/resources/Shaders/Default.shader");
 
+	Material testMat;
+	testMat.SetUniform("u_Color", glm::vec4(0.5f, 1.0f, 0.75f, 1.0f));
+	testMat.SerializeMaterial("../resources/Materials/Test3.mat");
+
+	//EnTT ECS Init
 	entt::registry registry;
 	
 	//OpenGL Setup

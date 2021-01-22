@@ -45,11 +45,14 @@
     <ClCompile Include="src\Rendering\Material.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="src\Serialization\MaterialArchive.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\ShaderManager.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\json.hpp">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="src\Rendering\Vertex.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
@@ -899,9 +902,6 @@
     <ClInclude Include="ThirdParty\glm\vector_relational.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\objSerialization\WavefrontSerialization.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="src\Rendering\Shader.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
@@ -930,6 +930,18 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\Material.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\ShaderManager.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Serialization\WavefrontSerialization.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Serialization\json.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Serialization\MaterialArchive.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

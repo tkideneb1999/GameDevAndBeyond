@@ -1,6 +1,6 @@
 #include "Mesh.h"
 
-#include "../objSerialization/WavefrontSerialization.h"
+#include "../Serialization/WavefrontSerialization.h"
 
 #define DEBUGBREAKLINE std::cout << "----------------------" << std::endl
 

@@ -8,6 +8,7 @@ Shader::Shader(const char* filePath)
 	std::cout << "----------------------" << std::endl;
 	std::cout << "Creating Shader" << std::endl;
 	CreateShaderProgram(m_ShaderLocation);
+	CacheAllUniforms();
 }
 
 Shader::Shader()
@@ -16,6 +17,7 @@ Shader::Shader()
 	std::cout << "----------------------" << std::endl;
 	std::cout << "Creating Shader" << std::endl;
 	CreateShaderProgram(m_ShaderLocation);
+	CacheAllUniforms();
 }
 
 Shader::~Shader()
@@ -66,6 +68,10 @@ void Shader::LoadSource(const char* filePath, std::string& outVertSource, std::s
 	{
 		nameStream >> m_Name;
 	}
+	else
+	{
+		std::cout << "Shader has no Name!" << std::endl;
+	}
 
 	while (std::getline(fileStream, tempString, '\n'))
 	{
@@ -94,32 +100,6 @@ void Shader::LoadSource(const char* filePath, std::string& outVertSource, std::s
 		fileContent += '\n';
 
 
-	}
-}
-
-void Shader::CacheAllUniforms()
-{
-	//Get amount of used Uniforms in Shader
-	GLint numActiveUniforms;
-	glGetProgramiv(m_ShaderProgramHandle, GL_ACTIVE_UNIFORMS, &numActiveUniforms);
-	if (numActiveUniforms == 0) return;
-
-	//Get Length of longest Uniform Variable
-	GLint uniformsMaxLength;
-	glGetProgramiv(m_ShaderProgramHandle, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformsMaxLength);
-	
-	//Get individual Uniforms & Cache them
-	GLenum type;
-	GLint size = 0;
-	std::vector<GLchar> nameData(uniformsMaxLength);
-	GLsizei length;
-
-	for (int i = 0; i < numActiveUniforms; i++)
-	{
-		glGetActiveUniform(m_ShaderProgramHandle, i, uniformsMaxLength, &length, &size, &type, &nameData[0]);
-		std::string name((char*)&nameData[0]);
-		CacheUniformLocation(name.c_str());
-		m_UniformTypeMap.insert(std::make_pair(name.c_str(), type));
 	}
 }
 
@@ -231,6 +211,31 @@ GLuint Shader::CacheUniformLocation(const char* name)
 
 	return m_UniformMap[name];
 }
+void Shader::CacheAllUniforms()
+{
+	//Get amount of used Uniforms in Shader
+	GLint numActiveUniforms;
+	glGetProgramiv(m_ShaderProgramHandle, GL_ACTIVE_UNIFORMS, &numActiveUniforms);
+	if (numActiveUniforms == 0) return;
+
+	//Get Length of longest Uniform Variable
+	GLint uniformsMaxLength;
+	glGetProgramiv(m_ShaderProgramHandle, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformsMaxLength);
+	
+	//Get individual Uniforms & Cache them
+	GLenum type;
+	GLint size = 0;
+	std::vector<GLchar> nameData(uniformsMaxLength);
+	GLsizei length;
+
+	for (int i = 0; i < numActiveUniforms; i++)
+	{
+		glGetActiveUniform(m_ShaderProgramHandle, i, uniformsMaxLength, &length, &size, &type, &nameData[0]);
+		std::string name((char*)&nameData[0]);
+		CacheUniformLocation(name.c_str());
+		m_UniformTypeMap.insert(std::make_pair(name.c_str(), type));
+	}
+}
 
 //Get Uniforms
 void Shader::GetUniform4f(const char* name, glm::vec4& value)
@@ -256,7 +261,7 @@ bool Shader::GetUniformLocation(const char* name, GLint* pLocation)
 	}
 }
 
-//Set Uniforms
+//Set Uniforms with Strings
 void Shader::SetUniform1f(const char* name, float value)
 {
 	glUseProgram(m_ShaderProgramHandle);
@@ -283,5 +288,39 @@ void Shader::SetUniform4f(const char* name, glm::vec4 value)
 }
 void Shader::SetMatrix4x4(const char* name, glm::mat4x4 value)
 {
+	glUseProgram(m_ShaderProgramHandle);
 	glUniformMatrix4fv(CacheUniformLocation(name), 1, GL_FALSE, &value[0][0]);
+	glUseProgram(0);
+}
+
+//Set Uniforms with ID
+void Shader::SetUniform1f(GLint id, float value)
+{
+	glUseProgram(m_ShaderProgramHandle);
+	glUniform1f(id, value);
+	glUseProgram(0);
+}
+void Shader::SetUniform2f(GLint id, glm::vec2 value)
+{
+	glUseProgram(m_ShaderProgramHandle);
+	glUniform2f(id, value.x, value.y);
+	glUseProgram(0);
+}
+void Shader::SetUniform3f(GLint id, glm::vec3 value)
+{
+	glUseProgram(m_ShaderProgramHandle);
+	glUniform3f(id, value.x, value.y, value.z);
+	glUseProgram(0);
+}
+void Shader::SetUniform4f(GLint id, glm::vec4 value)
+{
+	glUseProgram(m_ShaderProgramHandle);
+	glUniform4f(id, value.x, value.y, value.z, value.w);
+	glUseProgram(0);
+}
+void Shader::SetMatrix4x4(GLint id, glm::mat4x4 value)
+{
+	glUseProgram(m_ShaderProgramHandle);
+	glUniformMatrix4fv(id, 1, GL_FALSE, &value[0][0]);
+	glUseProgram(0);
 }
