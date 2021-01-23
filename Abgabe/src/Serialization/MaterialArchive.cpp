@@ -61,6 +61,8 @@ void MaterialSerialization::LoadMaterial(const char* filePath, std::string& shad
 
 	std::string currentLine;
 
+	bool shaderNameFound = false;
+
 	while (std::getline(filestream, currentLine, '\n'))
 	{
 		if (currentLine[0] == '#') continue;
@@ -69,6 +71,12 @@ void MaterialSerialization::LoadMaterial(const char* filePath, std::string& shad
 		std::string lineInfo;
 		
 		linestream >> lineInfo;
+		if (lineInfo == "Shader")
+		{
+			if (shaderNameFound)
+				continue;
+			linestream >> shadername;
+		}
 		if (lineInfo == "int")
 		{
 			linestream >> lineInfo;

@@ -18,9 +18,6 @@ public:
 	~Shader();
 	Shader(const Shader& shader);
 
-	void EnableShader();
-	void DisableShader();
-
 	std::unordered_map<std::string, GLenum>& GetUniformTypeMap(){ return m_UniformTypeMap; }
 	std::string GetName() { return m_Name; }
 
@@ -53,19 +50,24 @@ private:
 public:
 	const char* GetShaderLocation() { return m_ShaderLocation; }
 
+	void EnableShader();
+	void DisableShader();
+
 	//Set Uniforms with string
-	void SetUniform1f(const char* name, float value);
-	void SetUniform2f(const char* name, glm::vec2 value);
-	void SetUniform3f(const char* name, glm::vec3 value);
-	void SetUniform4f(const char* name, glm::vec4 value);
-	void SetMatrix4x4(const char* name, glm::mat4x4 value);
+	void SetUniform(const char* name, int value);
+	void SetUniform(const char* name, float value);
+	void SetUniform(const char* name, glm::vec2 value);
+	void SetUniform(const char* name, glm::vec3 value);
+	void SetUniform(const char* name, glm::vec4 value);
+	void SetUniform(const char* name, glm::mat4x4 value);
 
 	//Set Uniforms with IDs
-	void SetUniform1f(GLint id, float value);
-	void SetUniform2f(GLint id, glm::vec2 value);
-	void SetUniform3f(GLint id, glm::vec3 value);
-	void SetUniform4f(GLint id, glm::vec4 value);
-	void SetMatrix4x4(GLint id, glm::mat4x4 value);
+	void SetUniform(GLint id, int value);
+	void SetUniform(GLint id, float value);
+	void SetUniform(GLint id, glm::vec2 value);
+	void SetUniform(GLint id, glm::vec3 value);
+	void SetUniform(GLint id, glm::vec4 value);
+	void SetUniform(GLint id, glm::mat4x4 value);
 
 	//Get Uniform
 	void GetUniform4f(const char* name, glm::vec4& value);

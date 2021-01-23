@@ -262,65 +262,53 @@ bool Shader::GetUniformLocation(const char* name, GLint* pLocation)
 }
 
 //Set Uniforms with Strings
-void Shader::SetUniform1f(const char* name, float value)
+void Shader::SetUniform(const char* name, int value)
 {
-	glUseProgram(m_ShaderProgramHandle);
+	glUniform1i(CacheUniformLocation(name), value);
+}
+void Shader::SetUniform(const char* name, float value)
+{
 	glUniform1f(CacheUniformLocation(name), value);
-	glUseProgram(0);
 }
-void Shader::SetUniform2f(const char* name, glm::vec2 value)
+void Shader::SetUniform(const char* name, glm::vec2 value)
 {
-	glUseProgram(m_ShaderProgramHandle);
 	glUniform2f(CacheUniformLocation(name), value.x, value.y);
-	glUseProgram(0);
 }
-void Shader::SetUniform3f(const char* name, glm::vec3 value)
+void Shader::SetUniform(const char* name, glm::vec3 value)
 {
-	glUseProgram(m_ShaderProgramHandle);
 	glUniform3f(CacheUniformLocation(name), value.x, value.y, value.z);
-	glUseProgram(0);
 }
-void Shader::SetUniform4f(const char* name, glm::vec4 value)
+void Shader::SetUniform(const char* name, glm::vec4 value)
 {
-	glUseProgram(m_ShaderProgramHandle);
 	glUniform4f(CacheUniformLocation(name), value.x, value.y, value.z, value.w);
-	glUseProgram(0);
 }
-void Shader::SetMatrix4x4(const char* name, glm::mat4x4 value)
+void Shader::SetUniform(const char* name, glm::mat4x4 value)
 {
-	glUseProgram(m_ShaderProgramHandle);
 	glUniformMatrix4fv(CacheUniformLocation(name), 1, GL_FALSE, &value[0][0]);
-	glUseProgram(0);
 }
 
 //Set Uniforms with ID
-void Shader::SetUniform1f(GLint id, float value)
+void Shader::SetUniform(GLint id, int value)
 {
-	glUseProgram(m_ShaderProgramHandle);
+	glUniform1i(id, value);
+}
+void Shader::SetUniform(GLint id, float value)
+{
 	glUniform1f(id, value);
-	glUseProgram(0);
 }
-void Shader::SetUniform2f(GLint id, glm::vec2 value)
+void Shader::SetUniform(GLint id, glm::vec2 value)
 {
-	glUseProgram(m_ShaderProgramHandle);
 	glUniform2f(id, value.x, value.y);
-	glUseProgram(0);
 }
-void Shader::SetUniform3f(GLint id, glm::vec3 value)
+void Shader::SetUniform(GLint id, glm::vec3 value)
 {
-	glUseProgram(m_ShaderProgramHandle);
 	glUniform3f(id, value.x, value.y, value.z);
-	glUseProgram(0);
 }
-void Shader::SetUniform4f(GLint id, glm::vec4 value)
+void Shader::SetUniform(GLint id, glm::vec4 value)
 {
-	glUseProgram(m_ShaderProgramHandle);
 	glUniform4f(id, value.x, value.y, value.z, value.w);
-	glUseProgram(0);
 }
-void Shader::SetMatrix4x4(GLint id, glm::mat4x4 value)
+void Shader::SetUniform(GLint id, glm::mat4x4 value)
 {
-	glUseProgram(m_ShaderProgramHandle);
 	glUniformMatrix4fv(id, 1, GL_FALSE, &value[0][0]);
-	glUseProgram(0);
 }

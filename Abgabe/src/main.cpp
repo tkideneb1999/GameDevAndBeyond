@@ -35,7 +35,7 @@ int main()
 {
 	GLFWwindow* window;
 
-	//Initialize GLFW Library
+	//--Initialize GLFW Library
 	if (!glfwInit())
 		return -1;
 
@@ -44,7 +44,7 @@ int main()
 #endif
 	glfwWindowHint(GLFW_OPENGL_CORE_PROFILE, true);
 
-	//Create a windowed mode window and its OpenGL Context
+	//--Create a windowed mode window and its OpenGL Context
 	window = glfwCreateWindow(1280, 720, "Open GL Renderer", nullptr, nullptr);
 	if (!window)
 	{
@@ -52,10 +52,10 @@ int main()
 		return -1;
 	}
 
-	// Make the window's context current
+	//--Make the window's context current
 	glfwMakeContextCurrent(window);
 
-	//Input Handling
+	//--Input Handling
 	InputHandling::InputHandler inputHandler;
 	
 	glfwSetKeyCallback(window, inputHandler.KeyCallback);
@@ -66,7 +66,7 @@ int main()
 	if (GLEW_OK != err)
 		std::cout << "Error: " << glewGetErrorString(err) << std::endl;
 
-	// Debug Messaging System
+	//--Debug Messaging System
 #ifdef _DEBUG
 	GLint openGLFlags;
 	glGetIntegerv(GL_CONTEXT_FLAGS, &openGLFlags);
@@ -78,22 +78,19 @@ int main()
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
 	}
 
-	//Print Info
+	//--Print Info
 	RenderingUtils::printInfo();
 #endif
 	
-	//Materials
+	//--Register Shaders
 	ShaderManager& shaderManager = ShaderManager::Get();
 	shaderManager.RegisterShader("../Abgabe/resources/Shaders/Default.shader");
+	shaderManager.RegisterShader("../Abgabe/resources/Shaders/Lambert.shader");
 
-	Material testMat;
-	testMat.SetUniform("u_Color", glm::vec4(0.5f, 1.0f, 0.75f, 1.0f));
-	testMat.SerializeMaterial("../resources/Materials/Test3.mat");
-
-	//EnTT ECS Init
+	//--EnTT ECS Init
 	entt::registry registry;
 	
-	//OpenGL Setup
+	//--OpenGL Setup
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
@@ -103,27 +100,26 @@ int main()
 
 	RenderSystem renderSystem;
 
-	glm::vec3 mainLightDir(1.0f, 0.0f, 0.0f);
+	glm::vec3 mainLightDir(0.0f, 1.0f, 0.0f);
 
-	//Camera Setup
+	//--Camera Setup
 	int width, height;
 	glfwGetWindowSize(window, &width, &height);
 	float aspectRatio = (float)width / (float)height;
 
-	//Camera Entity
+	//--Camera Entity
 	entt::entity camera = registry.create();
-	auto& camTransform = registry.emplace<Transform>(camera, glm::vec3(0.0f, 0.0f, 3.0f), glm::quat(), glm::vec3(1.0f, 1.0f, 1.0f));
+	auto& camTransform = registry.emplace<Transform>(camera, glm::vec3(0.0f, 0.0f, 4.0f), glm::quat(), glm::vec3(1.0f, 1.0f, 1.0f));
 	auto& camComponent = registry.emplace<Camera>(camera, 45.0f, aspectRatio, 0.01f, 100.0f);
 
-	//Mesh Entities
+	//--Mesh Entities
 	std::cout << "-------------" << std::endl;
 	std::cout << "Creating Entity Suzanne" << std::endl;
 	entt::entity suzanne = registry.create();
 	registry.emplace<Transform>(suzanne);
 	auto& suzanneMesh = registry.emplace<Mesh>(suzanne, "../resources/suzanne.obj");
-	suzanneMesh.SetShader("../Abgabe/resources/Shaders/Lambert.shader");
-	suzanneMesh.shader->SetUniform3f("u_LightDir", mainLightDir);
-	suzanneMesh.shader->SetUniform4f("u_Color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	suzanneMesh.SetMaterial("../resources/Materials/Lambert.mat");
+	suzanneMesh.material.SetUniform("u_LightDir", mainLightDir);
 	
 	std::cout << "-------------" << std::endl;
 	std::cout << "Creating Entity Plane" << std::endl;
@@ -131,8 +127,7 @@ int main()
 	auto& planeTransform = registry.emplace<Transform>(plane);
 	planeTransform.SetPosition(glm::vec3(0.0f, -2.0f, 0.0f));
 	auto& planeMesh = registry.emplace<Mesh>(plane, "../resources/plane.obj");
-	planeMesh.SetShader("../Abgabe/resources/Shaders/Default.shader");
-	planeMesh.shader->SetUniform4f("u_Color", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	planeMesh.SetMaterial("../resources/Materials/Default.mat");
 
 	//Render Loop
 	while (!glfwWindowShouldClose(window))

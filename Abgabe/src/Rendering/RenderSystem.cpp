@@ -10,20 +10,23 @@ void RenderSystem::RenderSingle(Camera& camera, Transform& camtransform, Mesh& m
 	glBindVertexArray(mesh.getVAOHandle());
 	//glBindBuffer(GL_ARRAY_BUFFER, mesh.getVBOHandle());
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.getIBOHandle());
-	mesh.shader->EnableShader();
+	Material& mat = mesh.material;
+	mat.GetShader()->EnableShader();
 
 	//Set Uniform Data
 	glm::mat4 MVP = camera.Projection() * (camera.ViewMatrix(camtransform) * meshTransform.GetModelMatrix());
 	glm::mat4 ITM = glm::transpose(glm::inverse(meshTransform.GetModelMatrix()));
 
-	mesh.shader->SetMatrix4x4("u_MVP", MVP);
-	mesh.shader->SetMatrix4x4("u_ITM", ITM);
+	mat.SetUniform("u_MVP", MVP);
+
+	mat.SetUniform("u_ITM", ITM);
+	mat.TansferUniforms();
 
 	//Render
 	glDrawElements(GL_TRIANGLES, mesh.getIndicesCount(), GL_UNSIGNED_INT, 0);
 
 	//Cleanup
-	mesh.shader->DisableShader();
+	mat.GetShader()->DisableShader();
 }
 
 void RenderSystem::Render(entt::registry& registry)
@@ -42,9 +45,6 @@ void RenderSystem::Render(entt::registry& registry)
 			Mesh& mesh = meshView.get<Mesh>(meshEntity);
 			Transform& meshTransform = meshView.get<Transform>(meshEntity);
 			RenderSingle(camera, cameraTransform, mesh, meshTransform);
-			//glm::vec4 value = glm::vec4();
-			//mesh.shader->GetUniform4f("u_Color", value);
-			//std::cout << "Color: " << value.x << ", " << value.y << ", " << value.z << ", " << value.w << std::endl;
 		}
 	}
 }

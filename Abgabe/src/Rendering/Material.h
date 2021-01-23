@@ -38,6 +38,8 @@ public:
 	void SetUniform(const char* name, glm::vec4 value);
 	void SetUniform(const char* name, glm::mat4x4 value);
 
+	void TansferUniforms();
+
 private:
 	void GetUniformsFromShader();
 };

@@ -68,5 +68,6 @@ bool ShaderManager::RegisterShader(const char* sourcePath)
 	//Create and add shader to Lookup
 	Shader* shader = new Shader(sourcePath);
 	m_ShaderLookup.insert(std::make_pair(shader->GetName(), shader));
+	return true;
 }
 

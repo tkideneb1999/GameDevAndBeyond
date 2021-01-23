@@ -5,7 +5,7 @@
 #define DEBUGBREAKLINE std::cout << "----------------------" << std::endl
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
-	:shader(new Shader())
+	:material()
 {
 	DEBUGBREAKLINE;
 	std::cout << "Creating Mesh from existing Data" << std::endl;
@@ -15,7 +15,7 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
 }
 
 Mesh::Mesh(const char* modelPath)
-	:shader(new Shader())
+	:material()
 {
 	DEBUGBREAKLINE;
 	std::cout << "Loading Model from:" << std::endl;
@@ -25,7 +25,7 @@ Mesh::Mesh(const char* modelPath)
 }
 
 Mesh::Mesh()
-	:shader(new Shader())
+	:material()
 {
 	DEBUGBREAKLINE;
 	std::cout << "Loading Model from:" << std::endl;
@@ -35,7 +35,7 @@ Mesh::Mesh()
 }
 
 Mesh::Mesh(const Mesh& mesh)
-	:shader(new Shader(mesh.shader->GetShaderLocation())),
+	:material(),
 	m_vertices(mesh.m_vertices), m_indices(mesh.m_indices)
 {
 	DEBUGBREAKLINE;
@@ -58,14 +58,16 @@ Mesh::~Mesh()
 
 	//Delete VAO
 	glDeleteVertexArrays(1, &m_VAOHandle);
-
-	delete shader;
 }
 
-void Mesh::SetShader(const char* shaderPath)
+void Mesh::SetMaterial(const char* materialPath)
 {
-	delete shader;
-	shader = new Shader(shaderPath);
+	material = Material(materialPath);
+}
+
+void Mesh::SetMaterial(Material& newMaterial)
+{
+	material = newMaterial;
 }
 
 inline void Mesh::GenerateBuffers()

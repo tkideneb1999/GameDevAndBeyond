@@ -6,7 +6,7 @@
 #include "glm/vec3.hpp"
 
 #include "Vertex.h"
-#include "Shader.h"
+#include "Material.h"
 #include "Transform.h"
 #include "Camera.h"
 
@@ -21,7 +21,7 @@ private:
 	GLuint m_IBOHandle;
 
 public:
-	Shader* shader;
+	Material material;
 
 private:
 	inline void GenerateBuffers();
@@ -32,7 +32,8 @@ public:
 	~Mesh();
 	Mesh(const Mesh&);
 
-	void SetShader(const char* shaderPath);
+	void SetMaterial(const char* materialPath);
+	void SetMaterial(Material& newMaterial);
 
 	unsigned int getIndicesCount() { return m_indices.size(); }
 

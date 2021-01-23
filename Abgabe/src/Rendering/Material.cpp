@@ -78,10 +78,40 @@ void Material::SetUniform(const char* name, glm::mat4x4 value)
 	auto it = m_m4Uniforms.find(name);
 	if (it == m_m4Uniforms.end())
 	{
+		if (name = "u_ITM")
+			return;
 		std::cout << "Uniform '" << name << "' does not exist" << std::endl;
 		return;
 	}
 	it->second = value;
+}
+
+void Material::TansferUniforms()
+{
+	for (auto& element : m_iUniforms)
+	{
+		m_pShader->SetUniform(element.first.c_str(), element.second);
+	}
+	for (auto& element : m_fUniforms)
+	{
+		m_pShader->SetUniform(element.first.c_str(), element.second);
+	}
+	for (auto& element : m_v2Uniforms)
+	{
+		m_pShader->SetUniform(element.first.c_str(), element.second);
+	}
+	for (auto& element : m_v3Uniforms)
+	{
+		m_pShader->SetUniform(element.first.c_str(), element.second);
+	}
+	for (auto& element : m_v4Uniforms)
+	{
+		m_pShader->SetUniform(element.first.c_str(), element.second);
+	}
+	for (auto& element : m_m4Uniforms)
+	{
+		m_pShader->SetUniform(element.first.c_str(), element.second);
+	}
 }
 
 void Material::SetShader(std::string shaderName)
