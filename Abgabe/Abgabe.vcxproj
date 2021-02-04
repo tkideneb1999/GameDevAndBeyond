@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -163,6 +163,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\FPSCameraBehaviour.cpp" />
     <ClCompile Include="src\InputHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -175,9 +176,17 @@
     <ClCompile Include="src\Rendering\Transform.cpp" />
     <ClCompile Include="src\Serialization\MaterialArchive.cpp" />
     <ClCompile Include="ThirdParty\glm\detail\glm.cpp" />
+    <ClCompile Include="ThirdParty\ImGui\imgui.cpp" />
+    <ClCompile Include="ThirdParty\ImGui\imgui_demo.cpp" />
+    <ClCompile Include="ThirdParty\ImGui\imgui_draw.cpp" />
+    <ClCompile Include="ThirdParty\ImGui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="ThirdParty\ImGui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="ThirdParty\ImGui\imgui_tables.cpp" />
+    <ClCompile Include="ThirdParty\ImGui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\FPSCameraBehaviour.h" />
+    <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\InputHandler.h" />
     <ClInclude Include="src\Serialization\json.hpp" />
     <ClInclude Include="src\Serialization\MaterialArchive.h" />
@@ -474,6 +483,14 @@
     <ClInclude Include="ThirdParty\glm\vec3.hpp" />
     <ClInclude Include="ThirdParty\glm\vec4.hpp" />
     <ClInclude Include="ThirdParty\glm\vector_relational.hpp" />
+    <ClInclude Include="ThirdParty\ImGui\imconfig.h" />
+    <ClInclude Include="ThirdParty\ImGui\imgui.h" />
+    <ClInclude Include="ThirdParty\ImGui\imgui_impl_glfw.h" />
+    <ClInclude Include="ThirdParty\ImGui\imgui_impl_opengl3.h" />
+    <ClInclude Include="ThirdParty\ImGui\imgui_internal.h" />
+    <ClInclude Include="ThirdParty\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="ThirdParty\ImGui\imstb_textedit.h" />
+    <ClInclude Include="ThirdParty\ImGui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\Shaders\ColorFrag.shader" />

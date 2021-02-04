@@ -31,6 +31,8 @@ void RenderSystem::RenderSingle(Camera& camera, Transform& camtransform, Mesh& m
 
 void RenderSystem::Render(entt::registry& registry)
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	auto cameraView = registry.view<Camera, Transform>();
 	
 	for (auto cameraEntity : cameraView)

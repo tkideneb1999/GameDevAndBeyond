@@ -35,11 +35,13 @@ Mesh::Mesh()
 }
 
 Mesh::Mesh(const Mesh& mesh)
-	:material(),
+	:material(mesh.material),
 	m_vertices(mesh.m_vertices), m_indices(mesh.m_indices)
 {
 	DEBUGBREAKLINE;
 	std::cout << "Copying Mesh Data" << std::endl;
+	std::cout << "Vertex Count: " << m_vertices.size() << std::endl;
+	std::cout << "Indices Count: " << m_indices.size() << std::endl;
 	GenerateBuffers();
 }
 

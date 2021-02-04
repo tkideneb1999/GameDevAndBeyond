@@ -7,14 +7,19 @@
 #include "glm/glm.hpp"
 #include "entt/entt.hpp"
 
+#include "ImGui/imgui_impl_glfw.h"
+#include "ImGui/imgui_impl_opengl3.h"
+#include "ImGui/imgui.h"
+
 #include "Rendering/RenderSystem.h"
 #include "Rendering/Camera.h"
 #include "Rendering/Mesh.h"
 #include "Rendering/RenderingUtils.h"
 #include "InputHandler.h"
-#include "Serialization/MaterialArchive.h"
 #include "Rendering/Material.h"
 #include "Rendering/ShaderManager.h"
+
+#include "Scene.h"
 
 // int* var : declares pointer -> stores address to variable
 // *var		: dereferences pointer -> can change value
@@ -66,6 +71,13 @@ int main()
 	if (GLEW_OK != err)
 		std::cout << "Error: " << glewGetErrorString(err) << std::endl;
 
+	//--Init ImGUI
+	ImGui::CreateContext();
+	ImGui::StyleColorsDark();
+
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version 130");
+
 	//--Debug Messaging System
 #ifdef _DEBUG
 	GLint openGLFlags;
@@ -114,14 +126,6 @@ int main()
 
 	//--Mesh Entities
 	std::cout << "-------------" << std::endl;
-	std::cout << "Creating Entity Suzanne" << std::endl;
-	entt::entity suzanne = registry.create();
-	registry.emplace<Transform>(suzanne);
-	auto& suzanneMesh = registry.emplace<Mesh>(suzanne, "../resources/suzanne.obj");
-	suzanneMesh.SetMaterial("../resources/Materials/Lambert.mat");
-	suzanneMesh.material.SetUniform("u_LightDir", mainLightDir);
-	
-	std::cout << "-------------" << std::endl;
 	std::cout << "Creating Entity Plane" << std::endl;
 	entt::entity plane = registry.create();
 	auto& planeTransform = registry.emplace<Transform>(plane);
@@ -129,11 +133,30 @@ int main()
 	auto& planeMesh = registry.emplace<Mesh>(plane, "../resources/plane.obj");
 	planeMesh.SetMaterial("../resources/Materials/Default.mat");
 
-	//Render Loop
+	std::cout << "-------------" << std::endl;
+	std::cout << "Creating Entity Suzanne" << std::endl;
+	entt::entity suzanne = registry.create();
+	registry.emplace<Transform>(suzanne);
+	auto& suzanneMesh = registry.emplace<Mesh>(suzanne, "../resources/suzanne.obj");
+	suzanneMesh.SetMaterial("../resources/Materials/Lambert.mat");
+	suzanneMesh.material.SetUniform("u_LightDir", mainLightDir);
+
+	float imGuiFloat = 0;
+
+	Scene scene;
+	
+	//--Render Loop
 	while (!glfwWindowShouldClose(window))
 	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+		scene.SetGUIWindowData();
+
 		renderSystem.Render(registry);
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		glfwSwapBuffers(window);
 

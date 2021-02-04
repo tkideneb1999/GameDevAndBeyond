@@ -23,6 +23,8 @@ Material::Material(const char* filePath)
 }
 
 Material::Material(const Material& mat)
+	:m_iUniforms(mat.m_iUniforms), m_fUniforms(mat.m_fUniforms), m_v2Uniforms(mat.m_v2Uniforms), 
+	m_v3Uniforms(mat.m_v3Uniforms), m_v4Uniforms(mat.m_v4Uniforms), m_m4Uniforms(mat.m_m4Uniforms)
 {
 	std::string shaderName = mat.m_pShader->GetName();
 	m_pShader = ShaderManager::Get().GetShader(shaderName);
