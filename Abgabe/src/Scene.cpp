@@ -1,17 +1,6 @@
 #include "Scene.h"
 #include "ImGui/imgui.h"
-
-Entity::Entity(entt::entity entityID)
-	:entity(entityID), name("Entity")
-{
-
-}
-
-Entity::Entity(entt::entity entityID, const char* objectName)
-	:entity(entityID), name(objectName)
-{
-
-}
+#include "nlohmannJSON/json.hpp"
 
 Scene::Scene()
 {
@@ -24,33 +13,20 @@ void Scene::AddEntity()
 	entityList.emplace_back(Entity(entity));
 }
 
-void Scene::RemoveEntity()
+void Scene::RemoveEntity(int index)
 {
-
+	entt::entity entity = entityList[index].entity;
+	registry.remove_all(entity);
+	registry.destroy(entity);
+	entityList.erase(entityList.begin() + index);
 }
 
-void Scene::SaveScene(const char* filePath)
+void Scene::SerializeScene(const char* filePath)
 {
-
+	
 }
 
-void Scene::LoadScene(const char* filePath)
+void Scene::DeserializeScene(const char* filePath)
 {
 
-}
-
-void Scene::SetGUIWindowData()
-{
-	ImGui::Begin("Scene");
-	if (ImGui::Button("Add Entity"))
-	{
-		AddEntity();
-	}
-	ImGui::BeginChild("Entities");
-	for (auto entity : entityList)
-	{
-		if (ImGui::Button(entity.name.c_str()));
-	}
-	ImGui::EndChild();
-	ImGui::End();
 }

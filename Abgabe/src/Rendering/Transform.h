@@ -2,6 +2,9 @@
 
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/quaternion.hpp"
+
+class TransformGUI;
+
 class Transform
 {
 private:
@@ -30,4 +33,6 @@ public:
 
 private:
 	void ConstructMatrix();
+
+	friend class TransformGUI;
 };

@@ -20,6 +20,7 @@
 #include "Rendering/ShaderManager.h"
 
 #include "Scene.h"
+#include "GUI/SceneGUI.h"
 
 // int* var : declares pointer -> stores address to variable
 // *var		: dereferences pointer -> can change value
@@ -144,6 +145,7 @@ int main()
 	float imGuiFloat = 0;
 
 	Scene scene;
+	SceneGUI sceneGUI;
 	
 	//--Render Loop
 	while (!glfwWindowShouldClose(window))
@@ -152,8 +154,9 @@ int main()
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		scene.SetGUIWindowData();
+		sceneGUI.DrawGUI(scene);
 
+		//ImGui::ShowDemoWindow();
 		renderSystem.Render(registry);
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

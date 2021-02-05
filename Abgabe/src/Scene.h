@@ -3,29 +3,22 @@
 #include <unordered_map>
 #include <string>
 
-#include "entt/entt.hpp"
+#include "Entity.h"
 
-struct Entity
-{
-	entt::entity entity;
-	std::string name;
-
-	Entity() = delete;
-	Entity(entt::entity entityID);
-	Entity(entt::entity entityID, const char* name);
-};
+class SceneGUI;
 
 class Scene
 {
 private:
 	std::vector<Entity> entityList;
 	entt::registry registry;
+	int activeEntityIndex = -1;
 public:
 	Scene();
 	void AddEntity();
-	void RemoveEntity();
-	void SaveScene(const char* filePath);
-	void LoadScene(const char* filePath);
+	void RemoveEntity(int index);
+	void SerializeScene(const char* filePath);
+	void DeserializeScene(const char* filePath);
 
-	void SetGUIWindowData();
+	friend class SceneGUI;
 };

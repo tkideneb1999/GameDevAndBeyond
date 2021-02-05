@@ -15,6 +15,7 @@ class Mesh
 private:
 	std::vector<Vertex> m_vertices;
 	std::vector<unsigned int> m_indices;
+	std::string m_modelPath;
 
 	GLuint m_VAOHandle;
 	GLuint m_VBOHandle;
@@ -31,6 +32,8 @@ public:
 	Mesh();
 	~Mesh();
 	Mesh(const Mesh&);
+
+	void ChangeMesh(const char* modelPath);
 
 	void SetMaterial(const char* materialPath);
 	void SetMaterial(Material& newMaterial);

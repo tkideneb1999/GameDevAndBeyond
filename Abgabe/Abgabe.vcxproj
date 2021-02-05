@@ -185,10 +185,15 @@
     <ClCompile Include="ThirdParty\ImGui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\FPSCameraBehaviour.h" />
+    <ClInclude Include="src\GUI\EntityGUI.h" />
+    <ClInclude Include="src\GUI\MeshGUI.h" />
+    <ClInclude Include="src\GUI\SceneGUI.h" />
+    <ClInclude Include="src\GUI\TransformGUI.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\InputHandler.h" />
-    <ClInclude Include="src\Serialization\json.hpp" />
+    <ClInclude Include="ThirdParty\nlohmannJSON\json.hpp" />
     <ClInclude Include="src\Serialization\MaterialArchive.h" />
     <ClInclude Include="src\Serialization\WavefrontSerialization.h" />
     <ClInclude Include="src\Rendering\Camera.h" />

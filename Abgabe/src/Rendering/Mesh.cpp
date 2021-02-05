@@ -5,7 +5,7 @@
 #define DEBUGBREAKLINE std::cout << "----------------------" << std::endl
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
-	:material()
+	:material(), m_modelPath("Cache")
 {
 	DEBUGBREAKLINE;
 	std::cout << "Creating Mesh from existing Data" << std::endl;
@@ -14,13 +14,13 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
 	GenerateBuffers();
 }
 
-Mesh::Mesh(const char* modelPath)
-	:material()
+Mesh::Mesh(const char* initModelPath)
+	:material(), m_modelPath(initModelPath)
 {
 	DEBUGBREAKLINE;
 	std::cout << "Loading Model from:" << std::endl;
-	std::cout << modelPath << std::endl;
-	WavefrontSerialization::LoadWavefront(modelPath, m_vertices, m_indices);
+	std::cout << m_modelPath << std::endl;
+	WavefrontSerialization::LoadWavefront(m_modelPath.c_str(), m_vertices, m_indices);
 	GenerateBuffers();
 }
 
@@ -36,7 +36,8 @@ Mesh::Mesh()
 
 Mesh::Mesh(const Mesh& mesh)
 	:material(mesh.material),
-	m_vertices(mesh.m_vertices), m_indices(mesh.m_indices)
+	m_vertices(mesh.m_vertices), m_indices(mesh.m_indices),
+	m_modelPath(mesh.m_modelPath)
 {
 	DEBUGBREAKLINE;
 	std::cout << "Copying Mesh Data" << std::endl;
@@ -60,6 +61,21 @@ Mesh::~Mesh()
 
 	//Delete VAO
 	glDeleteVertexArrays(1, &m_VAOHandle);
+}
+
+void Mesh::ChangeMesh(const char* modelPath)
+{
+	m_modelPath = modelPath;
+	glDeleteBuffers(1, &m_VBOHandle);
+	glDeleteBuffers(1, &m_IBOHandle);
+	glDeleteVertexArrays(1, &m_VAOHandle);
+
+	WavefrontSerialization::LoadWavefront(m_modelPath.c_str(), m_vertices, m_indices);
+	DEBUGBREAKLINE;
+	std::cout << "Changed Model" << std::endl;
+	std::cout << "Vertex Count: " << m_vertices.size() << std::endl;
+	std::cout << "Indices Count: " << m_indices.size() << std::endl;
+	GenerateBuffers();
 }
 
 void Mesh::SetMaterial(const char* materialPath)
