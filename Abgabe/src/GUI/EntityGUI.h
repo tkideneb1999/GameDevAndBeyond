@@ -4,6 +4,7 @@
 
 #include "../Entity.h"
 #include "../GUI/TransformGUI.h"
+#include "../GUI/MeshGUI.h"
 
 class EntityGUI
 {
@@ -24,6 +25,26 @@ private:
 		}
 	}
 
+	inline void AddMeshComponent(Entity* pEntity, entt::registry& reg)
+	{
+		if (ImGui::Selectable("Mesh"))
+		{
+			if (reg.any<Mesh>(pEntity->entity))
+			{
+				std::cout << "Entity already has this Component" << std::endl;
+			}
+			else
+			{
+				reg.emplace<Mesh>(pEntity->entity);
+				if (!reg.any<Transform>(pEntity->entity))
+				{
+					reg.emplace<Transform>(pEntity->entity);
+				}
+			}
+			ImGui::CloseCurrentPopup();
+		}
+	}
+
 	inline void DrawComponentsGUI(Entity* pEntity, entt::registry& reg)
 	{
 		//TransformGUI
@@ -31,6 +52,13 @@ private:
 		{
 			auto& transform = reg.get<Transform>(pEntity->entity);
 			TransformGUI::DrawGUI(transform);
+		}
+
+		//MeshGUI
+		if (reg.any<Mesh>(pEntity->entity))
+		{
+			auto& mesh = reg.get<Mesh>(pEntity->entity);
+			MeshGUI::DrawGUI(mesh);
 		}
 	}
 public:
@@ -61,6 +89,7 @@ public:
 		if (ImGui::BeginPopup("Components"))
 		{
 			AddTransformComponent(pEntity, reg);
+			AddMeshComponent(pEntity, reg);
 			ImGui::EndPopup();
 		}
 

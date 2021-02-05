@@ -12,7 +12,6 @@ private:
 	glm::vec3 m_Position;
 	glm::quat m_Rotation;
 	glm::vec3 m_Scale;
-
 public:
 	Transform();
 	Transform(const Transform& transform) = default;

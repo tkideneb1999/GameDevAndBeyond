@@ -10,6 +10,8 @@
 #include "Transform.h"
 #include "Camera.h"
 
+class MeshGUI;
+
 class Mesh
 {
 private:
@@ -43,4 +45,6 @@ public:
 	GLuint getVAOHandle() { return m_VAOHandle; }
 	GLuint getVBOHandle() { return m_VBOHandle; }
 	GLuint getIBOHandle() { return m_IBOHandle; }
+
+	friend class MeshGUI;
 };
