@@ -4,17 +4,25 @@
 
 #include "Transform.h"
 
+class CameraGUI;
+
 class Camera
 {
+public:
+	float fovYangle;
+	float aspectRatio;
+	float zNear;
+	float zFar;
 private:
 	glm::mat4x4 m_Projection;
-
 public:
+	Camera();
 	Camera(float aspectRatio);
 	Camera(float fovYangle, float aspectRatio, float zNear, float zFar);
 	Camera(const Camera& camera) = default;
 
 	void SetCameraData(float fovY, float aspectRatio, float zNear, float zFar);
+	void ApplyCameraData();
 
 	inline glm::mat4x4 ViewMatrix(Transform cameraTransform)
 	{
@@ -25,4 +33,6 @@ public:
 	{
 		return m_Projection;
 	}
+
+	friend class CameraGUI;
 };

@@ -1010,6 +1010,12 @@
     <ClInclude Include="src\GUI\MeshGUI.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="src\GUI\CameraGUI.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GUI\MaterialGUI.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ThirdParty\glm\detail\func_common.inl">

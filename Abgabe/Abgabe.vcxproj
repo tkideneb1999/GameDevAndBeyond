@@ -187,7 +187,9 @@
   <ItemGroup>
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\FPSCameraBehaviour.h" />
+    <ClInclude Include="src\GUI\CameraGUI.h" />
     <ClInclude Include="src\GUI\EntityGUI.h" />
+    <ClInclude Include="src\GUI\MaterialGUI.h" />
     <ClInclude Include="src\GUI\MeshGUI.h" />
     <ClInclude Include="src\GUI\SceneGUI.h" />
     <ClInclude Include="src\GUI\TransformGUI.h" />

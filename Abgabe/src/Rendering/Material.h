@@ -8,6 +8,8 @@
 
 #include "Shader.h"
 
+class MaterialGUI;
+
 class Material
 {
 private:
@@ -27,6 +29,8 @@ public:
 	~Material();
 	Material(const Material& mat);
 
+	std::string& GetMaterialLocation() { return m_Location; }
+
 	void SerializeMaterial(const char* filePath);
 
 	void SetShader(std::string shaderName);
@@ -42,4 +46,7 @@ public:
 
 private:
 	void GetUniformsFromShader();
+	void LoadMaterial(std::string& outShaderName);
+
+	friend class MaterialGUI;
 };

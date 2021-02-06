@@ -28,6 +28,7 @@ public:
 
 private:
 	inline void GenerateBuffers();
+	inline void LoadMesh();
 public:
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
 	Mesh(const char* modelPath);

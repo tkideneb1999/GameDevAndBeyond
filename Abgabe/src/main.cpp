@@ -68,6 +68,7 @@ int main()
 	glfwSetCursorPosCallback(window, inputHandler.CursorPosCallback);
 	glfwSetMouseButtonCallback(window, inputHandler.MouseButtonCallback);
 
+	//--Glew Init
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
 		std::cout << "Error: " << glewGetErrorString(err) << std::endl;
@@ -101,7 +102,7 @@ int main()
 	shaderManager.RegisterShader("../Abgabe/resources/Shaders/Lambert.shader");
 
 	//--EnTT ECS Init
-	entt::registry registry;
+	//entt::registry registry;
 	
 	//--OpenGL Setup
 	glEnable(GL_DEPTH_TEST);
@@ -111,7 +112,7 @@ int main()
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
 
-	RenderSystem renderSystem;
+	//RenderSystem renderSystem;
 
 	glm::vec3 mainLightDir(0.0f, 1.0f, 0.0f);
 
@@ -120,44 +121,57 @@ int main()
 	glfwGetWindowSize(window, &width, &height);
 	float aspectRatio = (float)width / (float)height;
 
+	//--Delta Time Setup
+	double currentFrameTime = glfwGetTime();
+	double lastFrameTime = currentFrameTime;
+	double deltaTime;
+
 	//--Camera Entity
-	entt::entity camera = registry.create();
-	auto& camTransform = registry.emplace<Transform>(camera, glm::vec3(0.0f, 0.0f, 4.0f), glm::quat(), glm::vec3(1.0f, 1.0f, 1.0f));
-	auto& camComponent = registry.emplace<Camera>(camera, 45.0f, aspectRatio, 0.01f, 100.0f);
+	//entt::entity camera = registry.create();
+	//auto& camTransform = registry.emplace<Transform>(camera, glm::vec3(0.0f, 0.0f, 4.0f), glm::quat(), glm::vec3(1.0f, 1.0f, 1.0f));
+	//auto& camComponent = registry.emplace<Camera>(camera, 45.0f, aspectRatio, 0.01f, 100.0f);
 
 	//--Mesh Entities
-	std::cout << "-------------" << std::endl;
-	std::cout << "Creating Entity Plane" << std::endl;
-	entt::entity plane = registry.create();
-	auto& planeTransform = registry.emplace<Transform>(plane);
-	planeTransform.SetPosition(glm::vec3(0.0f, -2.0f, 0.0f));
-	auto& planeMesh = registry.emplace<Mesh>(plane, "../resources/plane.obj");
-	planeMesh.SetMaterial("../resources/Materials/Default.mat");
-
-	std::cout << "-------------" << std::endl;
-	std::cout << "Creating Entity Suzanne" << std::endl;
-	entt::entity suzanne = registry.create();
-	registry.emplace<Transform>(suzanne);
-	auto& suzanneMesh = registry.emplace<Mesh>(suzanne, "../resources/suzanne.obj");
-	suzanneMesh.SetMaterial("../resources/Materials/Lambert.mat");
-	suzanneMesh.material.SetUniform("u_LightDir", mainLightDir);
-
-	float imGuiFloat = 0;
+	//std::cout << "-------------" << std::endl;
+	//std::cout << "Creating Entity Plane" << std::endl;
+	//entt::entity plane = registry.create();
+	//auto& planeTransform = registry.emplace<Transform>(plane);
+	//planeTransform.SetPosition(glm::vec3(0.0f, -2.0f, 0.0f));
+	//auto& planeMesh = registry.emplace<Mesh>(plane, "../resources/plane.obj");
+	//planeMesh.SetMaterial("../resources/Materials/Default.mat");
+	//
+	//std::cout << "-------------" << std::endl;
+	//std::cout << "Creating Entity Suzanne" << std::endl;
+	//entt::entity suzanne = registry.create();
+	//registry.emplace<Transform>(suzanne);
+	//auto& suzanneMesh = registry.emplace<Mesh>(suzanne, "../resources/suzanne.obj");
+	//suzanneMesh.SetMaterial("../resources/Materials/Lambert.mat");
+	//suzanneMesh.material.SetUniform("u_LightDir", mainLightDir);
 
 	Scene scene;
+
 	SceneGUI sceneGUI;
 	
 	//--Render Loop
 	while (!glfwWindowShouldClose(window))
 	{
+		//Time handling
+		currentFrameTime = glfwGetTime();
+		deltaTime = currentFrameTime - lastFrameTime;
+		lastFrameTime = currentFrameTime;
+
+		//ImGui BeginFrame
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
 		sceneGUI.DrawGUI(scene);
 
+		scene.Update(deltaTime);
 		//ImGui::ShowDemoWindow();
-		renderSystem.Render(registry);
+		//renderSystem.Render(registry);
+
+		//ImGui EndFrame
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

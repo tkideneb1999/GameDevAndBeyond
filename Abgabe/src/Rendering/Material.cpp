@@ -1,5 +1,7 @@
 #include "Material.h"
 
+#include <filesystem>
+
 #include "../Serialization/MaterialArchive.h"
 #include "ShaderManager.h"
 
@@ -14,8 +16,7 @@ Material::Material(const char* filePath)
 	:m_Location(filePath)
 {
 	std::string shaderName;
-	MaterialSerialization::LoadMaterial(filePath, shaderName, m_iUniforms, m_fUniforms, m_v2Uniforms, m_v3Uniforms, m_v4Uniforms);
-
+	LoadMaterial(shaderName);
 	//Get Shader
 	m_pShader = ShaderManager::Get().GetShader(shaderName);
 	//Collect non Serialized Uniforms
@@ -183,6 +184,21 @@ void Material::GetUniformsFromShader()
 			}
 			break;
 		}
+	}
+}
+
+void Material::LoadMaterial(std::string& outShaderName)
+{
+	std::filesystem::path modelPath(m_Location);
+	std::string sEnding = modelPath.extension().generic_string();
+	if (sEnding == ".mat")
+	{
+		MaterialSerialization::LoadMaterial(m_Location.c_str(), outShaderName, m_iUniforms, m_fUniforms, m_v2Uniforms, m_v3Uniforms, m_v4Uniforms);		
+	}
+	else
+	{
+		std::cout << "Not a valid Material! Loading Default Material" << std::endl;
+		outShaderName = "Default";
 	}
 }
 

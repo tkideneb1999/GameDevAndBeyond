@@ -30,3 +30,18 @@ void Scene::DeserializeScene(const char* filePath)
 {
 
 }
+
+void Scene::Update(double deltaTime)
+{
+	renderSystem.Render(registry);
+}
+
+void Scene::OnWindowSizeChanged(GLFWwindow* window, int width, int height)
+{
+	auto cameraView = registry.view<Camera>();
+	for (auto cameraEntity : cameraView)
+	{
+		Camera& camera = cameraView.get<Camera>(cameraEntity);
+		camera.aspectRatio = (float)width / (float)height;
+	}
+}

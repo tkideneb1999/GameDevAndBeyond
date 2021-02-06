@@ -5,6 +5,7 @@
 #include "../Entity.h"
 #include "../GUI/TransformGUI.h"
 #include "../GUI/MeshGUI.h"
+#include "../GUI/CameraGUI.h"
 
 class EntityGUI
 {
@@ -45,6 +46,25 @@ private:
 		}
 	}
 
+	inline void AddCameraComponent(Entity* pEntity, entt::registry& reg)
+	{
+		if (ImGui::Selectable("Camera"))
+		{
+			if (reg.any<Camera>(pEntity->entity))
+			{
+				std::cout << "Entity already has this Component" << std::endl;
+			}
+			else
+			{
+				reg.emplace<Camera>(pEntity->entity);
+				if (!reg.any<Transform>(pEntity->entity))
+				{
+					reg.emplace<Transform>(pEntity->entity);
+				}
+			}
+		}
+	}
+
 	inline void DrawComponentsGUI(Entity* pEntity, entt::registry& reg)
 	{
 		//TransformGUI
@@ -59,6 +79,13 @@ private:
 		{
 			auto& mesh = reg.get<Mesh>(pEntity->entity);
 			MeshGUI::DrawGUI(mesh);
+		}
+
+		//Camera GUI
+		if (reg.any<Camera>(pEntity->entity))
+		{
+			auto& camera = reg.get<Camera>(pEntity->entity);
+			CameraGUI::DrawGUI(camera);
 		}
 	}
 public:
@@ -90,6 +117,7 @@ public:
 		{
 			AddTransformComponent(pEntity, reg);
 			AddMeshComponent(pEntity, reg);
+			AddCameraComponent(pEntity, reg);
 			ImGui::EndPopup();
 		}
 

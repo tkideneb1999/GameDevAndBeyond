@@ -1,5 +1,7 @@
 #include "Mesh.h"
 
+#include <filesystem>
+
 #include "../Serialization/WavefrontSerialization.h"
 
 #define DEBUGBREAKLINE std::cout << "----------------------" << std::endl
@@ -20,17 +22,17 @@ Mesh::Mesh(const char* initModelPath)
 	DEBUGBREAKLINE;
 	std::cout << "Loading Model from:" << std::endl;
 	std::cout << m_modelPath << std::endl;
-	WavefrontSerialization::LoadWavefront(m_modelPath.c_str(), m_vertices, m_indices);
+	LoadMesh();
 	GenerateBuffers();
 }
 
 Mesh::Mesh()
-	:material()
+	:material(), m_modelPath("../resources/plane.obj")
 {
 	DEBUGBREAKLINE;
 	std::cout << "Loading Model from:" << std::endl;
-	std::cout << "../resources/plane.obj" << std::endl;
-	WavefrontSerialization::LoadWavefront("../resources/plane.obj", m_vertices, m_indices);
+	std::cout << m_modelPath << std::endl;
+	LoadMesh();
 	GenerateBuffers();
 }
 
@@ -70,7 +72,7 @@ void Mesh::ChangeMesh(const char* modelPath)
 	glDeleteBuffers(1, &m_IBOHandle);
 	glDeleteVertexArrays(1, &m_VAOHandle);
 
-	WavefrontSerialization::LoadWavefront(m_modelPath.c_str(), m_vertices, m_indices);
+	LoadMesh();
 	DEBUGBREAKLINE;
 	std::cout << "Changed Model" << std::endl;
 	std::cout << "Vertex Count: " << m_vertices.size() << std::endl;
@@ -117,4 +119,18 @@ inline void Mesh::GenerateBuffers()
 
 	//Unbind Index Buffer
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+inline void Mesh::LoadMesh()
+{
+	std::filesystem::path modelPath(m_modelPath);
+	std::string sEnding = modelPath.extension().generic_string();
+	if (sEnding == ".obj")
+	{
+		WavefrontSerialization::LoadWavefront(m_modelPath.c_str(), m_vertices, m_indices);
+	}
+	else
+	{
+		std::cout << "File Extension not recognized" << std::endl;
+	}
 }
