@@ -12,9 +12,9 @@ struct GLFWwindow;
 class Scene
 {
 private:
-	std::vector<Entity> entityList;
-	entt::registry registry;
-	int activeEntityIndex = -1;
+	std::vector<Entity> m_entityList;
+	entt::registry m_registry;
+	int m_activeEntityIndex = -1;
 
 	RenderSystem renderSystem;
 public:

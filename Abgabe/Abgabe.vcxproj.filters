@@ -75,6 +75,9 @@
     <ClCompile Include="src\Scene.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="src\Serialization\SceneArchive.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Rendering\Vertex.h">
@@ -1014,6 +1017,12 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\GUI\MaterialGUI.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Serialization\SceneArchive.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Serialization\CustomTypeSerializationJson.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

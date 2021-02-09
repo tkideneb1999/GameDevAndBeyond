@@ -7,6 +7,7 @@ class SceneGUI
 {
 private:
 	EntityGUI m_entityGUI;
+	std::string tempFilePath;
 public:
 	void DrawGUI(Scene& scene)
 	{
@@ -35,11 +36,14 @@ public:
 		if (ImGui::BeginPopupModal("Save Scene?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 		{
 			char filepath[256] = "";
+			strcpy_s(filepath, tempFilePath.c_str());
 			ImGui::InputText("Location", filepath, 256);
+			tempFilePath = filepath;
 			if (ImGui::Button("Save"))
 			{
-				scene.SerializeScene(filepath);
+				scene.SerializeScene(tempFilePath.c_str());
 				ImGui::CloseCurrentPopup();
+				tempFilePath = "";
 			}
 
 			ImGui::SameLine();
@@ -62,13 +66,13 @@ public:
 		//Entity List
 		int markedForDelete = -1;
 		ImGui::BeginChild("Entities");
-		for (int i = 0; i < scene.entityList.size(); i++)
+		for (int i = 0; i < scene.m_entityList.size(); i++)
 		{
-			Entity& currentEntity = scene.entityList[i];
+			Entity& currentEntity = scene.m_entityList[i];
 			std::string selectableName = currentEntity.name + "##" + std::to_string(i);
 			if (ImGui::Selectable(selectableName.c_str()))
 			{
-				scene.activeEntityIndex = i;
+				scene.m_activeEntityIndex = i;
 			}
 			if (ImGui::BeginPopupContextItem())
 			{
@@ -89,19 +93,19 @@ public:
 		if (markedForDelete != -1)
 		{
 			scene.RemoveEntity(markedForDelete);
-			if (markedForDelete == scene.activeEntityIndex)
+			if (markedForDelete == scene.m_activeEntityIndex)
 			{
-				scene.activeEntityIndex = -1;
+				scene.m_activeEntityIndex = -1;
 			}
-			else if (markedForDelete < scene.activeEntityIndex)
+			else if (markedForDelete < scene.m_activeEntityIndex)
 			{
-				scene.activeEntityIndex--;
+				scene.m_activeEntityIndex--;
 			}
 		}
 		ImGui::EndChild();
 		ImGui::End();
 
-		if (scene.activeEntityIndex == -1) return;
-		m_entityGUI.DrawGUI(&(scene.entityList[scene.activeEntityIndex]), scene.registry);
+		if (scene.m_activeEntityIndex == -1) return;
+		m_entityGUI.DrawGUI(&(scene.m_entityList[scene.m_activeEntityIndex]), scene.m_registry);
 	}
 };

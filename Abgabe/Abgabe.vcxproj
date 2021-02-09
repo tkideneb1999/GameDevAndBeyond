@@ -175,6 +175,7 @@
     <ClCompile Include="src\Rendering\ShaderManager.cpp" />
     <ClCompile Include="src\Rendering\Transform.cpp" />
     <ClCompile Include="src\Serialization\MaterialArchive.cpp" />
+    <ClCompile Include="src\Serialization\SceneArchive.cpp" />
     <ClCompile Include="ThirdParty\glm\detail\glm.cpp" />
     <ClCompile Include="ThirdParty\ImGui\imgui.cpp" />
     <ClCompile Include="ThirdParty\ImGui\imgui_demo.cpp" />
@@ -195,6 +196,8 @@
     <ClInclude Include="src\GUI\TransformGUI.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\InputHandler.h" />
+    <ClInclude Include="src\Serialization\CustomTypeSerializationJson.h" />
+    <ClInclude Include="src\Serialization\SceneArchive.h" />
     <ClInclude Include="ThirdParty\nlohmannJSON\json.hpp" />
     <ClInclude Include="src\Serialization\MaterialArchive.h" />
     <ClInclude Include="src\Serialization\WavefrontSerialization.h" />

@@ -36,6 +36,8 @@ public:
 	~Mesh();
 	Mesh(const Mesh&);
 
+	std::string& GetModelPath() { return m_modelPath; }
+
 	void ChangeMesh(const char* modelPath);
 
 	void SetMaterial(const char* materialPath);

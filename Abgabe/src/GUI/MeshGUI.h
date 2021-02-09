@@ -23,7 +23,7 @@ public:
 			{
 				typedModelPath = modelPath;
 			}
-			if (ImGui::Button("Load"))
+			if (ImGui::Button("Load##1"))
 			{
 				mesh.ChangeMesh(modelPath);
 			}
@@ -36,7 +36,7 @@ public:
 			{
 				typedMaterialPath = materialPath;
 			}
-			if (ImGui::Button("Load"))
+			if (ImGui::Button("Load##2"))
 			{
 				mesh.SetMaterial(materialPath);
 			}

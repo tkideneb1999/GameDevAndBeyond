@@ -9,9 +9,10 @@ class Transform
 {
 private:
 	glm::mat4x4 m_ModelMatrix;
-	glm::vec3 m_Position;
-	glm::quat m_Rotation;
-	glm::vec3 m_Scale;
+public:
+	glm::vec3 position;
+	glm::quat rotation;
+	glm::vec3 scale;
 public:
 	Transform();
 	Transform(const Transform& transform) = default;
@@ -25,10 +26,6 @@ public:
 	void RotateAroundAxis(const glm::vec3& axis, const float& angleRadians);
 
 	glm::mat4x4 GetModelMatrix() { return m_ModelMatrix; }
-
-	glm::vec3 GetPosition() { return m_Position; }
-	glm::quat GetRotation() { return m_Rotation; }
-	glm::vec3 GetScale() { return m_Scale; }
 
 private:
 	void ConstructMatrix();
