@@ -15,6 +15,7 @@ class Material
 private:
 	std::string m_Name;
 	std::string m_Location;
+	bool m_IsSerialized;
 	Shader* m_pShader;
 	std::unordered_map<std::string, int> m_iUniforms;
 	std::unordered_map<std::string, float> m_fUniforms;
@@ -43,6 +44,7 @@ public:
 	void SetUniform(const char* name, glm::mat4x4 value);
 
 	void TansferUniforms();
+	bool IsSerialized() { return m_IsSerialized; }
 
 private:
 	void GetUniformsFromShader();

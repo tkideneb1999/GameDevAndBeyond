@@ -4,8 +4,8 @@
 
 #include "CustomTypeSerializationJson.h"
 
-SceneOutputArchive::SceneOutputArchive(const std::string& filePath, entt::registry* pRegistry)
-	:m_pCurrentJson(&m_rootJson), m_filePath(filePath), m_pRegistry(pRegistry)
+SceneOutputArchive::SceneOutputArchive(const std::string& filePath)
+	:m_pCurrentJson(&m_rootJson), m_filePath(filePath)
 {
 	
 }
@@ -16,59 +16,82 @@ SceneOutputArchive::~SceneOutputArchive()
 	filestream << m_rootJson.dump(4);
 }
 
-void SceneOutputArchive::Serialize(Entity& entity)
+void SceneOutputArchive::Serialize(bool value, std::string label)
 {
-	nlohmann::json* oldJson = m_pCurrentJson;
-	nlohmann::json entityJson;
-	m_pCurrentJson = &entityJson;
-
-	entt::entity& entityID = entity.entity;
-
-	Serialize<Transform>(entityID);
-	Serialize<Mesh>(entityID);
-	Serialize<Camera>(entityID);
-
-	(*oldJson)[entity.name] = entityJson;
-	m_pCurrentJson = oldJson;
+	(*m_pCurrentJson)[label] = value;
 }
 
-void SceneOutputArchive::Serialize(Transform& transform)
+void SceneOutputArchive::Serialize(float value, const std::string label)
 {
-	nlohmann::json* oldJson = m_pCurrentJson;
-	nlohmann::json transformJson;
-	m_pCurrentJson = &transformJson;
-
-	transformJson["Position"] = transform.position;
-	transformJson["Rotation"] = transform.rotation;
-	transformJson["Scale"] = transform.scale;
-	
-	(*oldJson)["Transform"] = transformJson;
-	m_pCurrentJson = oldJson;
+	(*m_pCurrentJson)[label] = value;
 }
 
-void SceneOutputArchive::Serialize(Mesh& mesh)
+void SceneOutputArchive::Serialize(int value, const std::string label)
 {
-	nlohmann::json* oldJson = m_pCurrentJson;
-	nlohmann::json meshJson;
-	m_pCurrentJson = &meshJson;
-
-	meshJson["ModelPath"] = mesh.GetModelPath();
-	meshJson["MaterialPath"] = mesh.material.GetMaterialLocation();
-
-	(*oldJson)["Mesh"] = meshJson;
-	m_pCurrentJson = oldJson;
+	(*m_pCurrentJson)[label] = value;
 }
 
-void SceneOutputArchive::Serialize(Camera& camera)
+void SceneOutputArchive::Serialize(unsigned long value, const std::string label)
 {
-	nlohmann::json* oldJson = m_pCurrentJson;
-	nlohmann::json cameraJson;
-	m_pCurrentJson = &cameraJson;
+	(*m_pCurrentJson)[label] = value;
+}
 
-	cameraJson["fovYAngle"] = camera.fovYangle;
-	cameraJson["zNear"] = camera.zNear;
-	cameraJson["zFar"] = camera.zFar;
+void SceneOutputArchive::Serialize(size_t value, const std::string label)
+{
+	(*m_pCurrentJson)[label] = value;
+}
 
-	(*oldJson)["Camera"] = cameraJson;
-	m_pCurrentJson = oldJson;
+void SceneOutputArchive::Serialize(std::string value, const std::string label)
+{
+	(*m_pCurrentJson)[label] = value;
+}
+
+void SceneOutputArchive::Serialize(const char* value, const std::string label)
+{
+	(*m_pCurrentJson)[label] = value;
+}
+
+void SceneOutputArchive::Serialize(glm::vec2 value, const std::string label)
+{
+	JsonType inlinedJson;
+
+	inlinedJson["x"] = value.x;
+	inlinedJson["y"] = value.y;
+
+	(*m_pCurrentJson)[label] = inlinedJson;
+}
+
+void SceneOutputArchive::Serialize(glm::vec3 value, const std::string label)
+{
+	JsonType inlinedJson;
+
+	inlinedJson["x"] = value.x;
+	inlinedJson["y"] = value.y;
+	inlinedJson["z"] = value.z;
+
+	(*m_pCurrentJson)[label] = inlinedJson;
+}
+
+void SceneOutputArchive::Serialize(glm::vec4 value, const std::string label)
+{
+	JsonType inlinedJson;
+
+	inlinedJson["x"] = value.x;
+	inlinedJson["y"] = value.y;
+	inlinedJson["z"] = value.z;
+	inlinedJson["w"] = value.z;
+
+	(*m_pCurrentJson)[label] = inlinedJson;
+}
+
+void SceneOutputArchive::Serialize(glm::quat value, const std::string label)
+{
+	JsonType inlinedJson;
+
+	inlinedJson["qw"] = value.w;
+	inlinedJson["qx"] = value.x;
+	inlinedJson["qy"] = value.y;
+	inlinedJson["qz"] = value.z;
+
+	(*m_pCurrentJson)[label] = inlinedJson;
 }

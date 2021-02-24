@@ -62,3 +62,10 @@ void Transform::ConstructMatrix()
 {
 	m_ModelMatrix = glm::translate(glm::mat4_cast(rotation) * glm::scale(glm::mat4(1.0), scale), position);
 }
+
+void Transform::Serialize(SceneOutputArchive& outputArchive)
+{
+	outputArchive.Serialize(position, "pos");
+	outputArchive.Serialize(rotation, "rot");
+	outputArchive.Serialize(scale, "scl");
+}

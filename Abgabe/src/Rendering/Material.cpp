@@ -6,6 +6,7 @@
 #include "ShaderManager.h"
 
 Material::Material()
+	:m_Location(""), m_IsSerialized(false)
 {
 	std::string shaderName("Default");
 	m_pShader = ShaderManager::Get().GetShader(shaderName);
@@ -13,7 +14,7 @@ Material::Material()
 }
 
 Material::Material(const char* filePath)
-	:m_Location(filePath)
+	:m_Location(filePath), m_IsSerialized(true)
 {
 	std::string shaderName;
 	LoadMaterial(shaderName);
@@ -24,7 +25,7 @@ Material::Material(const char* filePath)
 }
 
 Material::Material(const Material& mat)
-	:m_iUniforms(mat.m_iUniforms), m_fUniforms(mat.m_fUniforms), m_v2Uniforms(mat.m_v2Uniforms), 
+	:m_Location(mat.m_Location), m_IsSerialized(mat.m_IsSerialized), m_iUniforms(mat.m_iUniforms), m_fUniforms(mat.m_fUniforms), m_v2Uniforms(mat.m_v2Uniforms), 
 	m_v3Uniforms(mat.m_v3Uniforms), m_v4Uniforms(mat.m_v4Uniforms), m_m4Uniforms(mat.m_m4Uniforms)
 {
 	std::string shaderName = mat.m_pShader->GetName();
@@ -231,4 +232,6 @@ void Material::SerializeMaterial(const char* filePath)
 	{
 		archive.Serialize(uniform.second, uniform.first);
 	}
+
+	m_IsSerialized = true;
 }

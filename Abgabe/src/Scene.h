@@ -3,11 +3,13 @@
 #include <unordered_map>
 #include <string>
 
-#include "Entity.h"
+
 #include "Rendering/RenderSystem.h"
 
 class SceneGUI;
 struct GLFWwindow;
+
+class Entity;
 
 class Scene
 {
@@ -29,4 +31,5 @@ public:
 	void OnWindowSizeChanged(GLFWwindow* window, int width, int height);
 
 	friend class SceneGUI;
+	friend class Entity;
 };

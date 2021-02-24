@@ -1,6 +1,7 @@
 #include "Scene.h"
-#include "ImGui/imgui.h"
+
 #include "Serialization/SceneArchive.h"
+#include "Entity.h"
 
 Scene::Scene()
 {
@@ -10,7 +11,7 @@ Scene::Scene()
 void Scene::AddEntity()
 {
 	entt::entity entity = m_registry.create();
-	m_entityList.emplace_back(Entity(entity));
+	m_entityList.emplace_back(Entity(entity, *this));
 }
 
 void Scene::RemoveEntity(int index)
@@ -23,11 +24,8 @@ void Scene::RemoveEntity(int index)
 
 void Scene::SerializeScene(const char* filePath)
 {
-	SceneOutputArchive archive(filePath, &m_registry);
-	for (auto entity : m_entityList)
-	{
-		archive.Serialize(entity);
-	}
+	SceneOutputArchive outputArchive(filePath);
+	outputArchive.Serialize(m_entityList, "EntityList");
 }
 
 void Scene::DeserializeScene(const char* filePath)

@@ -3,6 +3,8 @@
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/quaternion.hpp"
 
+#include "../Serialization/SceneArchive.h"
+
 class TransformGUI;
 
 class Transform
@@ -31,4 +33,7 @@ private:
 	void ConstructMatrix();
 
 	friend class TransformGUI;
+
+public:
+	void Serialize(SceneOutputArchive& outputArchive);
 };

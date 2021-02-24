@@ -134,3 +134,18 @@ inline void Mesh::LoadMesh()
 		std::cout << "File Extension not recognized" << std::endl;
 	}
 }
+
+void Mesh::Serialize(SceneOutputArchive& outputArchive)
+{
+	outputArchive.Serialize(m_modelPath, "modelPath");
+	outputArchive.Serialize(material.IsSerialized(), "matSerialized");
+	if (material.IsSerialized())
+	{
+		outputArchive.Serialize(material.GetMaterialLocation(), "materialPath");
+	}
+	else
+	{
+		outputArchive.Serialize("", "materialPath");
+	}
+
+}

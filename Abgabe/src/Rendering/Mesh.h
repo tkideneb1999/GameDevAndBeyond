@@ -10,6 +10,8 @@
 #include "Transform.h"
 #include "Camera.h"
 
+#include "../Serialization/SceneArchive.h"
+
 class MeshGUI;
 
 class Mesh
@@ -48,6 +50,8 @@ public:
 	GLuint getVAOHandle() { return m_VAOHandle; }
 	GLuint getVBOHandle() { return m_VBOHandle; }
 	GLuint getIBOHandle() { return m_IBOHandle; }
+
+	void Serialize(SceneOutputArchive& outputArchive);
 
 	friend class MeshGUI;
 };

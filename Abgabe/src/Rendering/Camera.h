@@ -3,6 +3,7 @@
 #include "glm/mat4x4.hpp"
 
 #include "Transform.h"
+#include "../Serialization/SceneArchive.h"
 
 class CameraGUI;
 
@@ -33,6 +34,8 @@ public:
 	{
 		return m_Projection;
 	}
+
+	void Serialize(SceneOutputArchive& outputArchive);
 
 	friend class CameraGUI;
 };

@@ -1,7 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <string>
-
+//Third Party
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
@@ -11,16 +8,15 @@
 #include "ImGui/imgui_impl_opengl3.h"
 #include "ImGui/imgui.h"
 
-#include "Rendering/RenderSystem.h"
-#include "Rendering/Camera.h"
-#include "Rendering/Mesh.h"
+//Own
 #include "Rendering/RenderingUtils.h"
 #include "InputHandler.h"
-#include "Rendering/Material.h"
 #include "Rendering/ShaderManager.h"
 
 #include "Scene.h"
 #include "GUI/SceneGUI.h"
+
+#include "Serialization/SceneArchive.h"
 
 // int* var : declares pointer -> stores address to variable
 // *var		: dereferences pointer -> can change value
@@ -29,7 +25,7 @@
 // const int* p : reading possible but not modifying
 // int& r : creates reference
 // r->x : (*r).x
-//int* x, y : makes only first variable a pointer, has to be written as: int* x, *y
+// int* x, y : makes only first variable a pointer, has to be written as: int* x, *y
 
 //const int var = 1 : cannot change var anymore -> makes it read-only
 //const int* var = 1; int const* var = 1 : cannot change content of pointer
@@ -51,7 +47,7 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_CORE_PROFILE, true);
 
 	//--Create a windowed mode window and its OpenGL Context
-	window = glfwCreateWindow(1280, 720, "Open GL Renderer", nullptr, nullptr);
+	window = glfwCreateWindow(1280, 720, "Tiny Mini Game Engine", nullptr, nullptr);
 	if (!window)
 	{
 		glfwTerminate();
@@ -100,9 +96,6 @@ int main()
 	ShaderManager& shaderManager = ShaderManager::Get();
 	shaderManager.RegisterShader("../Abgabe/resources/Shaders/Default.shader");
 	shaderManager.RegisterShader("../Abgabe/resources/Shaders/Lambert.shader");
-
-	//--EnTT ECS Init
-	//entt::registry registry;
 	
 	//--OpenGL Setup
 	glEnable(GL_DEPTH_TEST);
@@ -111,10 +104,6 @@ int main()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
-
-	//RenderSystem renderSystem;
-
-	glm::vec3 mainLightDir(0.0f, 1.0f, 0.0f);
 
 	//--Camera Setup
 	int width, height;
@@ -125,28 +114,6 @@ int main()
 	double currentFrameTime = glfwGetTime();
 	double lastFrameTime = currentFrameTime;
 	double deltaTime;
-
-	//--Camera Entity
-	//entt::entity camera = registry.create();
-	//auto& camTransform = registry.emplace<Transform>(camera, glm::vec3(0.0f, 0.0f, 4.0f), glm::quat(), glm::vec3(1.0f, 1.0f, 1.0f));
-	//auto& camComponent = registry.emplace<Camera>(camera, 45.0f, aspectRatio, 0.01f, 100.0f);
-
-	//--Mesh Entities
-	//std::cout << "-------------" << std::endl;
-	//std::cout << "Creating Entity Plane" << std::endl;
-	//entt::entity plane = registry.create();
-	//auto& planeTransform = registry.emplace<Transform>(plane);
-	//planeTransform.SetPosition(glm::vec3(0.0f, -2.0f, 0.0f));
-	//auto& planeMesh = registry.emplace<Mesh>(plane, "../resources/plane.obj");
-	//planeMesh.SetMaterial("../resources/Materials/Default.mat");
-	//
-	//std::cout << "-------------" << std::endl;
-	//std::cout << "Creating Entity Suzanne" << std::endl;
-	//entt::entity suzanne = registry.create();
-	//registry.emplace<Transform>(suzanne);
-	//auto& suzanneMesh = registry.emplace<Mesh>(suzanne, "../resources/suzanne.obj");
-	//suzanneMesh.SetMaterial("../resources/Materials/Lambert.mat");
-	//suzanneMesh.material.SetUniform("u_LightDir", mainLightDir);
 
 	Scene scene;
 
@@ -169,7 +136,6 @@ int main()
 
 		scene.Update(deltaTime);
 		//ImGui::ShowDemoWindow();
-		//renderSystem.Render(registry);
 
 		//ImGui EndFrame
 		ImGui::Render();

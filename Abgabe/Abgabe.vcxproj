@@ -163,6 +163,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\FPSCameraBehaviour.cpp" />
     <ClCompile Include="src\InputHandler.cpp" />

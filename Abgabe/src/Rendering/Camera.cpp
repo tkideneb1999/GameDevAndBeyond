@@ -35,3 +35,11 @@ void Camera::ApplyCameraData()
 {
 	m_Projection = glm::perspective(fovYangle, aspectRatio, zNear, zFar);
 }
+
+void Camera::Serialize(SceneOutputArchive& outputArchive)
+{
+	outputArchive.Serialize(fovYangle, "fovY");
+	outputArchive.Serialize(aspectRatio, "aspectRation");
+	outputArchive.Serialize(zNear, "zNear");
+	outputArchive.Serialize(zFar, "zFar");
+}
