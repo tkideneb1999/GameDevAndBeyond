@@ -36,4 +36,5 @@ private:
 
 public:
 	void Serialize(SceneOutputArchive& outputArchive);
+	void Serialize(SceneInputArchive& inputArchive);
 };

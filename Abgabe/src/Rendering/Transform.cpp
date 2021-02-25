@@ -69,3 +69,12 @@ void Transform::Serialize(SceneOutputArchive& outputArchive)
 	outputArchive.Serialize(rotation, "rot");
 	outputArchive.Serialize(scale, "scl");
 }
+
+void Transform::Serialize(SceneInputArchive& inputArchive)
+{
+	inputArchive.Serialize(position, "pos");
+	inputArchive.Serialize(rotation, "rot");
+	inputArchive.Serialize(scale, "scl");
+
+	ConstructMatrix();
+}

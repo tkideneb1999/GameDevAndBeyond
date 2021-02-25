@@ -14,13 +14,13 @@ private:
 	{
 		if (ImGui::Selectable("Transform"))
 		{
-			if (reg.any<Transform>(pEntity->entity))
+			if (reg.any<Transform>(pEntity->entityHandle))
 			{
 				std::cout << "Entity already has this Component" << std::endl;
 			}
 			else
 			{
-				reg.emplace<Transform>(pEntity->entity);
+				reg.emplace<Transform>(pEntity->entityHandle);
 			}
 			ImGui::CloseCurrentPopup();
 		}
@@ -30,16 +30,16 @@ private:
 	{
 		if (ImGui::Selectable("Mesh"))
 		{
-			if (reg.any<Mesh>(pEntity->entity))
+			if (reg.any<Mesh>(pEntity->entityHandle))
 			{
 				std::cout << "Entity already has this Component" << std::endl;
 			}
 			else
 			{
-				reg.emplace<Mesh>(pEntity->entity);
-				if (!reg.any<Transform>(pEntity->entity))
+				reg.emplace<Mesh>(pEntity->entityHandle);
+				if (!reg.any<Transform>(pEntity->entityHandle))
 				{
-					reg.emplace<Transform>(pEntity->entity);
+					reg.emplace<Transform>(pEntity->entityHandle);
 				}
 			}
 			ImGui::CloseCurrentPopup();
@@ -50,16 +50,16 @@ private:
 	{
 		if (ImGui::Selectable("Camera"))
 		{
-			if (reg.any<Camera>(pEntity->entity))
+			if (reg.any<Camera>(pEntity->entityHandle))
 			{
 				std::cout << "Entity already has this Component" << std::endl;
 			}
 			else
 			{
-				reg.emplace<Camera>(pEntity->entity);
-				if (!reg.any<Transform>(pEntity->entity))
+				reg.emplace<Camera>(pEntity->entityHandle);
+				if (!reg.any<Transform>(pEntity->entityHandle))
 				{
-					reg.emplace<Transform>(pEntity->entity);
+					reg.emplace<Transform>(pEntity->entityHandle);
 				}
 			}
 		}
@@ -68,23 +68,23 @@ private:
 	inline void DrawComponentsGUI(Entity* pEntity, entt::registry& reg)
 	{
 		//TransformGUI
-		if (reg.any<Transform>(pEntity->entity))
+		if (reg.any<Transform>(pEntity->entityHandle))
 		{
-			auto& transform = reg.get<Transform>(pEntity->entity);
+			auto& transform = reg.get<Transform>(pEntity->entityHandle);
 			TransformGUI::DrawGUI(transform);
 		}
 
 		//MeshGUI
-		if (reg.any<Mesh>(pEntity->entity))
+		if (reg.any<Mesh>(pEntity->entityHandle))
 		{
-			auto& mesh = reg.get<Mesh>(pEntity->entity);
+			auto& mesh = reg.get<Mesh>(pEntity->entityHandle);
 			MeshGUI::DrawGUI(mesh);
 		}
 
 		//Camera GUI
-		if (reg.any<Camera>(pEntity->entity))
+		if (reg.any<Camera>(pEntity->entityHandle))
 		{
-			auto& camera = reg.get<Camera>(pEntity->entity);
+			auto& camera = reg.get<Camera>(pEntity->entityHandle);
 			CameraGUI::DrawGUI(camera);
 		}
 	}

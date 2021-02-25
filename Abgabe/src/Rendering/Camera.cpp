@@ -43,3 +43,13 @@ void Camera::Serialize(SceneOutputArchive& outputArchive)
 	outputArchive.Serialize(zNear, "zNear");
 	outputArchive.Serialize(zFar, "zFar");
 }
+
+void Camera::Serialize(SceneInputArchive& inputArchive)
+{
+	inputArchive.Serialize(fovYangle, "fovY");
+	inputArchive.Serialize(aspectRatio, "aspectRation");
+	inputArchive.Serialize(zNear, "zNear");
+	inputArchive.Serialize(zFar, "zFar");
+
+	ApplyCameraData();
+}

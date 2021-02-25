@@ -1,14 +1,14 @@
 {
     "EntityList": {
-        "size": 3,
+        "size": 2,
         "0": {
-            "EntityName": "sdassd",
+            "EntityName": "Camera",
             "AddedComponents": 5,
             "Transform": {
                 "pos": {
                     "x": 0.0,
                     "y": 0.0,
-                    "z": 0.0
+                    "z": 2.0
                 },
                 "rot": {
                     "qw": 0.0,
@@ -30,8 +30,8 @@
             }
         },
         "1": {
-            "EntityName": "hgjfg",
-            "AddedComponents": 1,
+            "EntityName": "Suzanne",
+            "AddedComponents": 3,
             "Transform": {
                 "pos": {
                     "x": 0.0,
@@ -49,11 +49,12 @@
                     "y": 1.0,
                     "z": 1.0
                 }
+            },
+            "Mesh": {
+                "modelPath": "../resources/suzanne.obj",
+                "matSerialized": true,
+                "materialPath": "../resources/Materials/Lambert.mat"
             }
-        },
-        "2": {
-            "EntityName": "Entity",
-            "AddedComponents": 0
         }
     }
 }

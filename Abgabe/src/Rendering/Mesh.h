@@ -52,6 +52,7 @@ public:
 	GLuint getIBOHandle() { return m_IBOHandle; }
 
 	void Serialize(SceneOutputArchive& outputArchive);
+	void Serialize(SceneInputArchive& inputArchive);
 
 	friend class MeshGUI;
 };

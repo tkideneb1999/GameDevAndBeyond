@@ -138,14 +138,44 @@ inline void Mesh::LoadMesh()
 void Mesh::Serialize(SceneOutputArchive& outputArchive)
 {
 	outputArchive.Serialize(m_modelPath, "modelPath");
-	outputArchive.Serialize(material.IsSerialized(), "matSerialized");
+	bool materialSerialized = material.IsSerialized();
+	outputArchive.Serialize(materialSerialized, "matSerialized");
 	if (material.IsSerialized())
 	{
 		outputArchive.Serialize(material.GetMaterialLocation(), "materialPath");
 	}
 	else
 	{
-		outputArchive.Serialize("", "materialPath");
+		std::string loc("");
+		outputArchive.Serialize(loc, "materialPath");
 	}
 
+}
+
+void Mesh::Serialize(SceneInputArchive& inputArchive)
+{
+	inputArchive.Serialize(m_modelPath, "modelPath");
+	bool materialSerialized = material.IsSerialized();
+	inputArchive.Serialize(materialSerialized, "matSerialized");
+	if (materialSerialized)
+	{
+		std::string materialPath;
+		inputArchive.Serialize(materialPath, "materialPath");
+		material = Material(materialPath.c_str());
+	}
+	else
+	{
+		material = Material();
+	}
+
+	glDeleteBuffers(1, &m_VBOHandle);
+	glDeleteBuffers(1, &m_IBOHandle);
+	glDeleteVertexArrays(1, &m_VAOHandle);
+
+	LoadMesh();
+	DEBUGBREAKLINE;
+	std::cout << "Loaded Model from Serialized Content" << std::endl;
+	std::cout << "Vertex Count: " << m_vertices.size() << std::endl;
+	std::cout << "Indices Count: " << m_indices.size() << std::endl;
+	GenerateBuffers();
 }

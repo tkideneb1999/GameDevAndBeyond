@@ -54,11 +54,32 @@ public:
 			ImGui::EndPopup();
 		}
 
-		//Load Scene -- NOT IMPLEMENTED
+		//Load Scene
 		ImGui::SameLine();
 		if (ImGui::Button("Load Scene"))
 		{
+			ImGui::OpenPopup("Load Scene?");
+		}
 
+		if (ImGui::BeginPopupModal("Load Scene?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			char filepath[256] = "";
+			strcpy_s(filepath, tempFilePath.c_str());
+			ImGui::InputText("Location", filepath, 256);
+			tempFilePath = filepath;
+			if (ImGui::Button("Load"))
+			{
+				scene.DeserializeScene(tempFilePath.c_str());
+				ImGui::CloseCurrentPopup();
+				tempFilePath = "";
+			}
+
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel"))
+			{
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
 		}
 
 		ImGui::Separator();

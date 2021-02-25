@@ -36,6 +36,7 @@ public:
 	}
 
 	void Serialize(SceneOutputArchive& outputArchive);
+	void Serialize(SceneInputArchive& inputArchive);
 
 	friend class CameraGUI;
 };
