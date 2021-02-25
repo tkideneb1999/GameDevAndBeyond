@@ -7,7 +7,7 @@ class SceneGUI
 {
 private:
 	EntityGUI m_entityGUI;
-	std::string tempFilePath;
+	std::string tempFilePath = "../resources/TestScene.sc";
 public:
 	void DrawGUI(Scene& scene)
 	{
