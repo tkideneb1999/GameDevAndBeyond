@@ -1438,8 +1438,6 @@
     <None Include="ThirdParty\glm\gtx\wrap.inl">
       <Filter>Headerdateien</Filter>
     </None>
-    <None Include="resources\Shaders\ColorVert.shader" />
-    <None Include="resources\Shaders\ColorFrag.shader" />
     <None Include="resources\Shaders\Default.shader" />
     <None Include="resources\Shaders\Lambert.shader" />
   </ItemGroup>

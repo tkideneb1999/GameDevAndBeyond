@@ -504,8 +504,6 @@
     <ClInclude Include="ThirdParty\ImGui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\Shaders\ColorFrag.shader" />
-    <None Include="resources\Shaders\ColorVert.shader" />
     <None Include="resources\Shaders\Default.shader" />
     <None Include="resources\Shaders\Lambert.shader" />
     <None Include="ThirdParty\glm\detail\func_common.inl" />
