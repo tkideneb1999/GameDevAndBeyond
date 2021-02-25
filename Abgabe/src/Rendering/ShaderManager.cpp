@@ -30,6 +30,17 @@ Shader* ShaderManager::GetShader(std::string& name)
 	return lookupIt->second;
 }
 
+void ShaderManager::GetShaderNames(std::vector<std::string>& shaderNames)
+{
+	shaderNames.clear();
+	shaderNames.reserve(m_ShaderLookup.size());
+
+	for (auto& lookUpElement : m_ShaderLookup)
+	{
+		shaderNames.emplace_back(lookUpElement.first);
+	}
+}
+
 bool ShaderManager::RegisterShader(const char* sourcePath)
 {
 	std::ifstream filestream(sourcePath);

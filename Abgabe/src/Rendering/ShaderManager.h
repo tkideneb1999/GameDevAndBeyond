@@ -14,6 +14,7 @@ public:
 	ShaderManager(const ShaderManager&) = delete;
 
 	Shader* GetShader(std::string& name);
+	void GetShaderNames(std::vector<std::string>& shaderNames);
 	bool RegisterShader(const char* sourcePath);
 private:
 	static ShaderManager s_instance;

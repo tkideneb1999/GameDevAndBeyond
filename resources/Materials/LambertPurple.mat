@@ -1,0 +1,4 @@
+#Material
+Shader Lambert
+vec3 u_LightDir 1 0 0
+vec4 u_Color 1 0.25 1 1

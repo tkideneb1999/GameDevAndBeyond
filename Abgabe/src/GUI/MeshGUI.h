@@ -40,6 +40,11 @@ public:
 			{
 				mesh.SetMaterial(materialPath);
 			}
+			ImGui::SameLine();
+			if (ImGui::Button("Save Material"))
+			{
+				mesh.material.SerializeMaterial(materialPath);
+			}
 			MaterialGUI::DrawGUI(mesh.material);
 			ImGui::TreePop();
 		}

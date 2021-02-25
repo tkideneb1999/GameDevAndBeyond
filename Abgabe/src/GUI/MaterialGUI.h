@@ -12,6 +12,25 @@ public:
 		if (ImGui::TreeNode("Material"))
 		{
 			ImGui::Text(material.m_Name.c_str());
+			if (ImGui::Selectable(material.GetShader()->GetName().c_str()))
+			{
+				ImGui::OpenPopup("Select Shader");
+			}
+			if (ImGui::BeginPopup("Select Shader"))
+			{
+				std::vector<std::string> shaderNames;
+				ShaderManager::Get().GetShaderNames(shaderNames);
+				for (auto& shaderName : shaderNames)
+				{
+					if (ImGui::Selectable(shaderName.c_str()))
+					{
+						material.SetShader(shaderName);
+						ImGui::CloseCurrentPopup();
+					}
+				}
+				ImGui::EndPopup();
+			}
+
 			//iUniforms
 			if (material.m_iUniforms.size() > 0)
 			{
