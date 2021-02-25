@@ -115,13 +115,6 @@ int main()
 	double lastFrameTime = currentFrameTime;
 	double deltaTime;
 
-	//--Testing
-	//{
-	//	SceneInputArchive outArchive("../resources/JsonTest.sc");
-	//	Transform testTransform(glm::vec3(1.0f, 3.45f, -1.123f), glm::quat(), glm::vec3(1.1f, 4.5f, 6.213f));
-	//	testTransform.Serialize(outArchive);
-	//}
-
 	Scene scene;
 
 	SceneGUI sceneGUI;
